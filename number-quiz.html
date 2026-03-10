@@ -378,7 +378,6 @@ function speak(text){
     window.speechSynthesis.speak(u);
   });
 }
-window.speechSynthesis&&window.speechSynthesis.getVoices();
 
 // ─── FLOATERS ───────────────────────────────────────────────
 function initFloaters(){
@@ -413,11 +412,7 @@ function getNext(){
 // ─── START ──────────────────────────────────────────────────
 function startMode(m){
   getAC();
-  if(window.speechSynthesis){
-    const u=new SpeechSynthesisUtterance('');
-    u.volume=0;u.rate=1;
-    window.speechSynthesis.speak(u);
-  }
+
   mode=m;streak=0;
   initFloaters();
   if(mode==='add'){
@@ -949,4 +944,13 @@ function createCenterSparkles(){
     s.style.fontSize=(20+Math.random()*20)+'px';
     s.style.left=(window.innerWidth*.12+Math.random()*window.innerWidth*.76)+'px';
     s.style.top=(window.innerHeight*.12+Math.random()*window.innerHeight*.7)+'px';
-    s.style
+    s.style.animationDelay=(Math.random()*.4)+'s';
+    s.style.animation='sparkleAnim 1.5s ease-out forwards';
+    s.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),2000);
+  }
+}
+</script>
+</body>
+</html>
