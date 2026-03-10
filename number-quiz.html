@@ -55,6 +55,17 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 .mode-btn.sub{background:linear-gradient(135deg,#FF6B6B,#ee5a24);}
 .mode-btn.mul{background:linear-gradient(135deg,#a29bfe,#6c5ce7);}
 .mode-btn.div{background:linear-gradient(135deg,#fd79a8,#e84393);}
+.mode-btn.story{background:linear-gradient(135deg,#f9ca24,#f0932b);}
+.lang-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.lang-overlay.hidden{display:none;}
+.lang-box{background:white;border-radius:26px;padding:28px 20px;max-width:340px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);text-align:center;}
+.lang-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#2c3e50;margin-bottom:18px;}
+.lang-btn{display:block;width:100%;padding:14px;margin-bottom:12px;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:transform .1s;}
+.lang-btn:active{transform:scale(.97);}
+.lang-btn.en{background:linear-gradient(135deg,#74b9ff,#0984e3);color:white;box-shadow:0 4px 0 #0660ae;}
+.lang-btn.tr{background:linear-gradient(135deg,#ff7675,#d63031);color:white;box-shadow:0 4px 0 #a01e1e;}
+.lang-btn.nl{background:linear-gradient(135deg,#fd79a8,#e84393);color:white;box-shadow:0 4px 0 #a01e68;}
+.lang-close{margin-top:4px;padding:8px 24px;background:#eee;border:none;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;color:#888;}
 .mode-btn .bi{font-size:clamp(26px,7vw,40px);}
 .signature{font-family:'Caveat',cursive;font-size:clamp(19px,4.8vw,27px);color:rgba(15,45,90,.78);text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.5);margin-top:22px;letter-spacing:.5px;animation:sigFade 3s ease-in-out infinite alternate;}
 @keyframes sigFade{from{opacity:.7}to{opacity:1}}
@@ -161,6 +172,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <button class="mode-btn div" onclick="startMode('div')">
       <span class="bi">➗</span>Divide!
     </button>
+    <button class="mode-btn story" onclick="showLangPicker()">
+      <span class="bi">📖</span>Math Problems
+    </button>
   </div>
   <div class="signature">Made with love</div>
   <div style="font-family:'Caveat',cursive;font-size:clamp(12px,3vw,15px);color:rgba(15,45,90,0.55);margin-top:6px;letter-spacing:.3px;">contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a1c1b080f11181b16191343493a1d171b131654191517">[email&#160;protected]</a></div>
@@ -258,6 +272,21 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
   </div>
   <div class="add-opts" id="divRow1"></div>
   <div class="add-opts2" id="divRow2"></div>
+</div>
+
+<!-- STORY -->
+<div class="screen hidden" id="storyScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="storyStreakEl">🔥 0</div>
+  </div>
+  <div class="add-card" style="padding:18px 20px;">
+    <div style="font-size:clamp(11px,2.8vw,13px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;" id="storyLangLabel">Math Problems</div>
+    <div style="font-size:clamp(24px,7vw,42px);margin-bottom:8px;" id="storyCharEmoji">🧒</div>
+    <div style="font-size:clamp(14px,3.8vw,18px);font-weight:700;color:#2c3e50;line-height:1.5;text-align:center;min-height:70px;" id="storyText"></div>
+  </div>
+  <div class="add-opts" id="storyRow1"></div>
+  <div class="add-opts2" id="storyRow2"></div>
 </div>
 
 <!-- DRAW -->
@@ -760,6 +789,254 @@ function onDivSelect(btn,selected,correct){
   onMathSelect('divRow1','divRow2','divStreakEl',btn,selected,correct,()=>loadDivQuestion());
 }
 
+
+// ─── MATH PROBLEMS (STORY MODE) ──────────────────────────────
+
+const STORY_CHARS = [
+  {name:'Arya', emoji:'👧'},
+  {name:'Kerem Alp', emoji:'👦'},
+  {name:'Elif', emoji:'👧'},
+  {name:'Can', emoji:'👦'},
+  {name:'Zeynep', emoji:'👧'},
+  {name:'Mia', emoji:'👧'},
+  {name:'Lucas', emoji:'👦'},
+  {name:'Emma', emoji:'👧'},
+  {name:'Noah', emoji:'👦'},
+  {name:'Lena', emoji:'👧'},
+  {name:'Maya', emoji:'👧'},
+  {name:'Tom', emoji:'👦'},
+  {name:'Sara', emoji:'👧'},
+  {name:'Ali', emoji:'👦'},
+  {name:'Nora', emoji:'👧'},
+  {name:'Max', emoji:'👦'},
+  {name:'Hana', emoji:'👧'},
+  {name:'Leo', emoji:'👦'},
+  {name:'Iris', emoji:'👧'},
+  {name:'Finn', emoji:'👦'},
+];
+
+// Each template has: text pattern + compatible objects + type (add/sub)
+const STORY_TEMPLATES = {
+  en: {
+    add: [
+      { t: '{name} has {a} {obj}. Gets {b} more. How many in total?', objs: ['apples🍎','cookies🍪','strawberries🍓','grapes🍇','books📚','balloons🎈','flowers🌸','stars⭐','fish🐟','eggs🥚'] },
+      { t: '{name} eats {a} {obj} in the morning and {b} in the evening. How many in total?', objs: ['apples🍎','cookies🍪','strawberries🍓','grapes🍇','crackers🍘','cherries🍒'] },
+      { t: '{name} finds {a} {obj} in the garden. Then finds {b} more. How many now?', objs: ['flowers🌸','butterflies🦋','snails🐌','berries🫐','leaves🍃','bugs🐛'] },
+      { t: 'There are {a} {obj} in the pond. {b} more jump in. How many in the pond?', objs: ['frogs🐸','ducks🦆','fish🐟'] },
+      { t: '{name} picks {a} {obj} from the tree. Then picks {b} more. How many in the basket?', objs: ['apples🍎','oranges🍊','cherries🍒','pears🍐'] },
+      { t: '{name} has {a} {obj}. A friend gives {b} more. How many does {name} have?', objs: ['balloons🎈','stickers⭐','cards🃏','marbles🔮','toys🧸'] },
+      { t: '{a} {obj} are in the box. {name} puts {b} more inside. How many in the box?', objs: ['books📚','toys🧸','cars🚗','balls⚽','crayons🖍️'] },
+      { t: '{name} scores {a} points. Then scores {b} more. What is the total score?', objs: [''] },
+      { t: '{name} sees {a} {obj} in the park. Then sees {b} more. How many in total?', objs: ['birds🐦','butterflies🦋','ducks🦆','squirrels🐿️','dogs🐶'] },
+      { t: '{a} {obj} are in the nest. {b} more fly in. How many are in the nest now?', objs: ['birds🐦','eggs🥚'] },
+      { t: '{name} buys {a} {obj} at the market. Then buys {b} more. How many in total?', objs: ['apples🍎','oranges🍊','tomatoes🍅','bananas🍌','eggs🥚'] },
+      { t: '{name} draws {a} {obj} before lunch and {b} after lunch. How many in total?', objs: ['stars⭐','flowers🌸','hearts❤️','suns☀️'] },
+      { t: '{name} puts {a} {obj} on the table. Then adds {b} more. How many on the table?', objs: ['cups🥤','books📚','toys🧸','crayons🖍️'] },
+      { t: '{a} {obj} swim in the sea. {b} more join them. How many are swimming?', objs: ['fish🐟','dolphins🐬','turtles🐢'] },
+      { t: '{name} collects {a} {obj} on day one and {b} on day two. How many in all?', objs: ['shells🐚','stones🪨','flowers🌸','stickers⭐'] },
+      { t: '{name} has {a} {obj} in the bag. Adds {b} more after school. How many now?', objs: ['books📚','crayons🖍️','pencils✏️'] },
+      { t: '{a} {obj} are on the left. {b} are on the right. How many in total?', objs: ['stars⭐','flowers🌸','balloons🎈','apples🍎'] },
+      { t: '{name} bakes {a} {obj}. Then bakes {b} more. How many in total?', objs: ['cookies🍪','muffins🧁','cakes🎂'] },
+      { t: '{name} catches {a} {obj}. Then catches {b} more. How many in total?', objs: ['fish🐟','butterflies🦋','fireflies✨'] },
+      { t: '{name} plants {a} {obj} on Monday and {b} on Friday. How many plants in all?', objs: ['flowers🌸','seeds🌱','trees🌳'] },
+    ],
+    sub: [
+      { t: '{name} has {a} {obj}. {b} of them pop. How many are left?', objs: ['balloons🎈'] },
+      { t: '{name} has {a} {obj}. Gives {b} to a friend. How many does {name} have now?', objs: ['cookies🍪','stickers⭐','apples🍎','cards🃏','flowers🌸','grapes🍇'] },
+      { t: 'There are {a} {obj} on the shelf. {b} fall down. How many are left?', objs: ['books📚','toys🧸','cups🥤','apples🍎'] },
+      { t: '{name} has {a} {obj}. Eats {b} of them. How many are left?', objs: ['cookies🍪','strawberries🍓','grapes🍇','cherries🍒','apples🍎'] },
+      { t: '{name} has {a} {obj}. Loses {b} on the way. How many does {name} still have?', objs: ['balloons🎈','stickers⭐','marbles🔮','cards🃏'] },
+      { t: 'There are {a} {obj} in the tree. {b} fly away. How many stay?', objs: ['birds🐦','butterflies🦋'] },
+      { t: '{name} bakes {a} {obj}. Friends eat {b}. How many are left?', objs: ['cookies🍪','muffins🧁','cakes🎂'] },
+      { t: 'There are {a} {obj} in the pond. {b} swim away. How many are left?', objs: ['fish🐟','ducks🦆','frogs🐸'] },
+      { t: '{name} picks {a} {obj}. Puts {b} back. How many does {name} keep?', objs: ['apples🍎','oranges🍊','flowers🌸','shells🐚'] },
+      { t: '{a} {obj} are in the nest. {b} fly away. How many are still in the nest?', objs: ['birds🐦','eggs🥚'] },
+      { t: '{name} has {a} {obj}. Uses {b} of them. How many are left?', objs: ['crayons🖍️','pencils✏️','stickers⭐'] },
+      { t: '{name} has {a} {obj} in the fridge. Eats {b} for breakfast. How many are left?', objs: ['eggs🥚','strawberries🍓','grapes🍇'] },
+      { t: '{a} {obj} are playing. {b} go home. How many are still playing?', objs: ['kids👧','dogs🐶','cats🐱','frogs🐸'] },
+      { t: '{name} has {a} {obj}. Gives {b} to the teacher. How many left?', objs: ['books📚','pencils✏️','crayons🖍️','flowers🌸'] },
+      { t: 'There are {a} {obj} on the tree. The wind blows {b} down. How many are left?', objs: ['apples🍎','leaves🍃','oranges🍊'] },
+      { t: '{name} catches {a} {obj}. Puts {b} back in the water. How many does {name} keep?', objs: ['fish🐟'] },
+      { t: '{name} has {a} {obj}. {b} get wet in the rain. How many are dry?', objs: ['books📚','cards🃏','stickers⭐'] },
+      { t: '{a} {obj} are on the fence. {b} fly off. How many stay?', objs: ['birds🐦','butterflies🦋'] },
+      { t: '{name} has {a} {obj}. Shares {b} with friends. How many are left?', objs: ['cookies🍪','grapes🍇','strawberries🍓','stickers⭐'] },
+      { t: 'There are {a} {obj} in the jar. {b} roll away. How many are in the jar?', objs: ['marbles🔮','candies🍬','coins🪙'] },
+    ]
+  },
+  tr: {
+    add: [
+      { t: "{name}'nin {a} tane {obj} var. {b} tane daha alıyor. Toplam kaç tane?", objs: ['elması🍎','kurabiyesi🍪','çileği🍓','üzümü🍇','kitabı📚','balonu🎈','çiçeği🌸','yıldızı⭐','balığı🐟','yumurtası🥚'] },
+      { t: '{name} sabah {a} {obj} yiyor, akşam {b} tane daha. Toplam kaç tane yedi?', objs: ['elma🍎','kurabiye🍪','çilek🍓','üzüm🍇','kiraz🍒'] },
+      { t: '{name} bahçede {a} {obj} buluyor. Sonra {b} tane daha buluyor. Kaç tane var?', objs: ['çiçek🌸','kelebek🦋','böcek🐛','yaprak🍃','meyve🫐'] },
+      { t: 'Havuzda {a} {obj} var. {b} tane daha atlıyor. Havuzda kaç tane var?', objs: ['kurbağa🐸','ördek🦆','balık🐟'] },
+      { t: '{name} ağaçtan {a} {obj} topluyor. Sonra {b} tane daha. Sepette kaç tane var?', objs: ['elma🍎','portakal🍊','kiraz🍒','armut🍐'] },
+      { t: "{name}'nin {a} {obj} var. Arkadaşı {b} tane daha veriyor. Kaç tanesi var?", objs: ['balonu🎈','çıkartması⭐','kartı🃏','bileziği🔮','oyuncağı🧸'] },
+      { t: 'Kutuda {a} {obj} var. {name} {b} tane daha koyuyor. Kutuda kaç tane var?', objs: ['kitap📚','oyuncak🧸','araba🚗','top⚽','boya kalemi🖍️'] },
+      { t: '{name} {a} puan alıyor. Sonra {b} puan daha. Toplam kaç puan?', objs: [''] },
+      { t: '{name} parkta {a} {obj} görüyor. Sonra {b} tane daha. Toplam kaç tane gördü?', objs: ['kuş🐦','kelebek🦋','ördek🦆','sincap🐿️','köpek🐶'] },
+      { t: 'Yuvada {a} {obj} var. {b} tane daha geliyor. Yuvada kaç tane var?', objs: ['kuş🐦','yumurta🥚'] },
+      { t: '{name} marketten {a} {obj} alıyor. Sonra {b} tane daha. Toplam kaç tane?', objs: ['elma🍎','portakal🍊','domates🍅','muz🍌','yumurta🥚'] },
+      { t: '{name} öğleden önce {a}, sonra {b} {obj} çiziyor. Toplam kaç tane çizdi?', objs: ['yıldız⭐','çiçek🌸','kalp❤️','güneş☀️'] },
+      { t: '{name} masaya {a} {obj} koyuyor. Sonra {b} tane daha. Masada kaç tane var?', objs: ['bardak🥤','kitap📚','oyuncak🧸','boya kalemi🖍️'] },
+      { t: 'Denizde {a} {obj} yüzüyor. {b} tane daha katılıyor. Kaç tane yüzüyor?', objs: ['balık🐟','yunus🐬','kaplumbağa🐢'] },
+      { t: '{name} birinci gün {a}, ikinci gün {b} {obj} topluyor. Toplam kaç tane?', objs: ['deniz kabuğu🐚','taş🪨','çiçek🌸','çıkartma⭐'] },
+      { t: '{name} çantasında {a} {obj} var. Okuldan sonra {b} tane daha ekliyor. Kaç tane?', objs: ['kitap📚','boya kalemi🖍️','kalem✏️'] },
+      { t: 'Solda {a} {obj} var, sağda {b} tane. Toplam kaç tane?', objs: ['yıldız⭐','çiçek🌸','balon🎈','elma🍎'] },
+      { t: '{name} {a} {obj} pişiriyor. Sonra {b} tane daha. Toplam kaç tane pişirdi?', objs: ['kurabiye🍪','muffin🧁','kek🎂'] },
+      { t: '{name} {a} {obj} yakalıyor. Sonra {b} tane daha. Toplam kaç tane?', objs: ['balık🐟','kelebek🦋','ateşböceği✨'] },
+      { t: '{name} Pazartesi {a}, Cuma {b} {obj} ekiyor. Toplam kaç tane ekti?', objs: ['çiçek🌸','tohum🌱','ağaç🌳'] },
+    ],
+    sub: [
+      { t: "{name}'nin {a} {obj} var. {b} tanesi patlıyor. Kaç tane kaldı?", objs: ['balonu🎈'] },
+      { t: "{name}'nin {a} {obj} var. Arkadaşına {b} tane veriyor. Kaç tane kaldı?", objs: ['kurabiyesi🍪','çıkartması⭐','elması🍎','kartı🃏','çiçeği🌸','üzümü🍇'] },
+      { t: 'Rafta {a} {obj} var. {b} tanesi düşüyor. Kaç tane kaldı?', objs: ['kitap📚','oyuncak🧸','bardak🥤','elma🍎'] },
+      { t: "{name}'nin {a} {obj} var. {b} tanesini yiyor. Kaç tane kaldı?", objs: ['kurabiye🍪','çilek🍓','üzüm🍇','kiraz🍒','elma🍎'] },
+      { t: "{name}'nin {a} {obj} var. Yolda {b} tanesini kaybediyor. Kaç tanesi kaldı?", objs: ['balonu🎈','çıkartması⭐','bileziği🔮','kartı🃏'] },
+      { t: 'Ağaçta {a} {obj} var. {b} tanesi uçup gidiyor. Kaç tanesi kaldı?', objs: ['kuş🐦','kelebek🦋'] },
+      { t: '{name} {a} {obj} pişiriyor. Arkadaşları {b} tanesini yiyor. Kaç tane kaldı?', objs: ['kurabiye🍪','muffin🧁','kek🎂'] },
+      { t: 'Havuzda {a} {obj} var. {b} tanesi yüzüp gidiyor. Kaç tane kaldı?', objs: ['balık🐟','ördek🦆','kurbağa🐸'] },
+      { t: '{name} {a} {obj} topluyor. {b} tanesini geri bırakıyor. Kaç tane aldı?', objs: ['elma🍎','portakal🍊','çiçek🌸','deniz kabuğu🐚'] },
+      { t: 'Yuvada {a} {obj} var. {b} tanesi uçup gidiyor. Kaç tanesi kaldı?', objs: ['kuş🐦','yumurta🥚'] },
+      { t: "{name}'nin {a} {obj} var. {b} tanesini kullanıyor. Kaç tane kaldı?", objs: ['boya kalemi🖍️','kalem✏️','çıkartma⭐'] },
+      { t: 'Buzdolabında {a} {obj} var. {name} kahvaltıda {b} tanesini yiyor. Kaç tane kaldı?', objs: ['yumurta🥚','çilek🍓','üzüm🍇'] },
+      { t: '{a} {obj} oynuyor. {b} tanesi eve gidiyor. Kaç tanesi hâlâ oynuyor?', objs: ['çocuk👧','köpek🐶','kedi🐱','kurbağa🐸'] },
+      { t: "{name}'nin {a} {obj} var. {b} tanesini öğretmenine veriyor. Kaç tane kaldı?", objs: ['kitap📚','kalem✏️','boya kalemi🖍️','çiçek🌸'] },
+      { t: 'Ağaçta {a} {obj} var. Rüzgar {b} tanesini düşürüyor. Kaç tane kaldı?', objs: ['elma🍎','yaprak🍃','portakal🍊'] },
+      { t: '{name} {a} {obj} yakalıyor. {b} tanesini suya geri bırakıyor. Kaç tane aldı?', objs: ['balık🐟'] },
+      { t: "{name}'nin {a} {obj} var. {b} tanesi yağmurda ıslanıyor. Kaç tanesi kuru kaldı?", objs: ['kitap📚','kartı🃏','çıkartma⭐'] },
+      { t: 'Çitte {a} {obj} var. {b} tanesi uçup gidiyor. Kaç tanesi kaldı?', objs: ['kuş🐦','kelebek🦋'] },
+      { t: "{name}'nin {a} {obj} var. Arkadaşlarıyla {b} tanesini paylaşıyor. Kaç tane kaldı?", objs: ['kurabiye🍪','üzüm🍇','çilek🍓','çıkartma⭐'] },
+      { t: 'Kavanozda {a} {obj} var. {b} tanesi yuvarlanıp gidiyor. Kaç tane kaldı?', objs: ['misket🔮','şeker🍬','bozuk para🪙'] },
+    ]
+  },
+  nl: {
+    add: [
+      { t: '{name} heeft {a} {obj}. Krijgt er {b} bij. Hoeveel zijn het er in totaal?', objs: ['appels🍎','koekjes🍪','aardbeien🍓','druiven🍇','boeken📚','ballonnen🎈','bloemen🌸','sterren⭐','vissen🐟','eieren🥚'] },
+      { t: '{name} eet {a} {obj} in de ochtend en {b} in de avond. Hoeveel in totaal?', objs: ['appels🍎','koekjes🍪','aardbeien🍓','druiven🍇','kersen🍒'] },
+      { t: '{name} vindt {a} {obj} in de tuin. Dan vindt {name} er {b} meer. Hoeveel nu?', objs: ['bloemen🌸','vlinders🦋','slakken🐌','bessen🫐','bladeren🍃'] },
+      { t: 'Er zijn {a} {obj} in de vijver. Er springen {b} bij. Hoeveel zijn er nu?', objs: ['kikkers🐸','eenden🦆','vissen🐟'] },
+      { t: '{name} plukt {a} {obj} van de boom. Dan plukt {name} er {b} meer. Hoeveel in de mand?', objs: ['appels🍎','sinaasappels🍊','kersen🍒','peren🍐'] },
+      { t: '{name} heeft {a} {obj}. Een vriend geeft er {b} bij. Hoeveel heeft {name} nu?', objs: ['ballonnen🎈','stickers⭐','kaarten🃏','knikkels🔮','speelgoed🧸'] },
+      { t: 'Er zitten {a} {obj} in de doos. {name} legt er {b} bij. Hoeveel zitten er in de doos?', objs: ['boeken📚','speelgoed🧸','autos🚗','ballen⚽','kleurpotloden🖍️'] },
+      { t: '{name} scoort {a} punten. Dan scoort {name} er {b} meer. Hoeveel punten in totaal?', objs: [''] },
+      { t: '{name} ziet {a} {obj} in het park. Dan ziet {name} er {b} meer. Hoeveel in totaal?', objs: ['vogels🐦','vlinders🦋','eenden🦆','eekhoorns🐿️','honden🐶'] },
+      { t: 'Er zitten {a} {obj} in het nest. Er komen {b} bij. Hoeveel zitten er nu in het nest?', objs: ['vogels🐦','eieren🥚'] },
+      { t: '{name} koopt {a} {obj} op de markt. Dan koopt {name} er {b} meer. Hoeveel in totaal?', objs: ['appels🍎','sinaasappels🍊','tomaten🍅','bananen🍌','eieren🥚'] },
+      { t: '{name} tekent {a} {obj} voor de lunch en {b} erna. Hoeveel in totaal?', objs: ['sterren⭐','bloemen🌸','harten❤️','zonnen☀️'] },
+      { t: '{name} legt {a} {obj} op tafel. Dan legt {name} er {b} bij. Hoeveel liggen er op tafel?', objs: ['bekers🥤','boeken📚','speelgoed🧸','kleurpotloden🖍️'] },
+      { t: 'Er zwemmen {a} {obj} in de zee. Er komen {b} bij. Hoeveel zwemmen er?', objs: ['vissen🐟','dolfijnen🐬','schildpadden🐢'] },
+      { t: '{name} verzamelt op dag één {a} en op dag twee {b} {obj}. Hoeveel in totaal?', objs: ['schelpen🐚','stenen🪨','bloemen🌸','stickers⭐'] },
+      { t: '{name} heeft {a} {obj} in de tas. Na school komen er {b} bij. Hoeveel nu?', objs: ['boeken📚','kleurpotloden🖍️','potloden✏️'] },
+      { t: 'Links zijn {a} {obj} en rechts zijn er {b}. Hoeveel zijn het er in totaal?', objs: ['sterren⭐','bloemen🌸','ballonnen🎈','appels🍎'] },
+      { t: '{name} bakt {a} {obj}. Dan bakt {name} er {b} meer. Hoeveel in totaal?', objs: ['koekjes🍪','muffins🧁','taartjes🎂'] },
+      { t: '{name} vangt {a} {obj}. Dan vangt {name} er {b} meer. Hoeveel in totaal?', objs: ['vissen🐟','vlinders🦋','glimwormen✨'] },
+      { t: '{name} plant op maandag {a} en op vrijdag {b} {obj}. Hoeveel in totaal?', objs: ['bloemen🌸','zaadjes🌱','bomen🌳'] },
+    ],
+    sub: [
+      { t: '{name} heeft {a} {obj}. Er springen {b} kapot. Hoeveel zijn er nog?', objs: ['ballonnen🎈'] },
+      { t: '{name} heeft {a} {obj}. Geeft er {b} aan een vriend. Hoeveel heeft {name} nu?', objs: ['koekjes🍪','stickers⭐','appels🍎','kaarten🃏','bloemen🌸','druiven🍇'] },
+      { t: 'Er staan {a} {obj} op de plank. Er vallen {b} af. Hoeveel staan er nog?', objs: ['boeken📚','speelgoed🧸','bekers🥤','appels🍎'] },
+      { t: '{name} heeft {a} {obj}. Eet er {b} op. Hoeveel zijn er nog?', objs: ['koekjes🍪','aardbeien🍓','druiven🍇','kersen🍒','appels🍎'] },
+      { t: '{name} heeft {a} {obj}. Verliest er {b} onderweg. Hoeveel heeft {name} nog?', objs: ['ballonnen🎈','stickers⭐','knikkels🔮','kaarten🃏'] },
+      { t: 'Er zitten {a} {obj} in de boom. Er vliegen {b} weg. Hoeveel blijven er?', objs: ['vogels🐦','vlinders🦋'] },
+      { t: '{name} bakt {a} {obj}. Vrienden eten er {b} op. Hoeveel zijn er nog?', objs: ['koekjes🍪','muffins🧁','taartjes🎂'] },
+      { t: 'Er zijn {a} {obj} in de vijver. Er zwemmen {b} weg. Hoeveel zijn er nog?', objs: ['vissen🐟','eenden🦆','kikkers🐸'] },
+      { t: '{name} plukt {a} {obj}. Legt er {b} terug. Hoeveel houdt {name} over?', objs: ['appels🍎','sinaasappels🍊','bloemen🌸','schelpen🐚'] },
+      { t: 'Er zitten {a} {obj} in het nest. Er vliegen {b} weg. Hoeveel zitten er nog?', objs: ['vogels🐦','eieren🥚'] },
+      { t: '{name} heeft {a} {obj}. Gebruikt er {b}. Hoeveel zijn er nog?', objs: ['kleurpotloden🖍️','potloden✏️','stickers⭐'] },
+      { t: 'In de koelkast zitten {a} {obj}. {name} eet er {b} bij het ontbijt. Hoeveel zijn er nog?', objs: ['eieren🥚','aardbeien🍓','druiven🍇'] },
+      { t: 'Er spelen {a} {obj}. Er gaan {b} naar huis. Hoeveel spelen er nog?', objs: ['kinderen👧','honden🐶','katten🐱','kikkers🐸'] },
+      { t: '{name} heeft {a} {obj}. Geeft er {b} aan de juf. Hoeveel zijn er nog?', objs: ['boeken📚','potloden✏️','kleurpotloden🖍️','bloemen🌸'] },
+      { t: 'Er hangen {a} {obj} aan de boom. De wind blaast er {b} af. Hoeveel hangen er nog?', objs: ['appels🍎','bladeren🍃','sinaasappels🍊'] },
+      { t: '{name} vangt {a} {obj}. Laat er {b} terug in het water. Hoeveel houdt {name}?', objs: ['vissen🐟'] },
+      { t: '{name} heeft {a} {obj}. Er worden er {b} nat in de regen. Hoeveel zijn er droog?', objs: ['boeken📚','kaarten🃏','stickers⭐'] },
+      { t: 'Er zitten {a} {obj} op het hek. Er vliegen {b} weg. Hoeveel blijven er?', objs: ['vogels🐦','vlinders🦋'] },
+      { t: '{name} heeft {a} {obj}. Deelt er {b} uit aan vrienden. Hoeveel zijn er nog?', objs: ['koekjes🍪','druiven🍇','aardbeien🍓','stickers⭐'] },
+      { t: 'Er zitten {a} {obj} in de pot. Er rollen {b} weg. Hoeveel zitten er nog in de pot?', objs: ['knikkels🔮','snoepjes🍬','muntjes🪙'] },
+    ]
+  }
+};
+
+let storyLang = 'en';
+
+function showLangPicker(){
+  document.getElementById('langOverlay').classList.remove('hidden');
+}
+
+function startStoryMode(lang){
+  document.getElementById('langOverlay').classList.add('hidden');
+  storyLang = lang;
+  mode = 'story';
+  streak = 0;
+  initFloaters();
+  loadStoryQuestion();
+}
+
+function loadStoryQuestion(){
+  const lang = storyLang;
+  const templates = STORY_TEMPLATES[lang];
+  const isAdd = Math.random() < 0.5;
+  const pool = isAdd ? templates.add : templates.sub;
+  const tpl = pool[Math.floor(Math.random()*pool.length)];
+  const char = STORY_CHARS[Math.floor(Math.random()*STORY_CHARS.length)];
+
+  // Pick object from template's list
+  let objRaw = tpl.objs[Math.floor(Math.random()*tpl.objs.length)];
+
+  // Generate numbers
+  let a, b, correct;
+  if(isAdd){
+    a = Math.floor(Math.random()*14)+1; // 1-14
+    b = Math.floor(Math.random()*(20-a))+1; // sum max 20
+    correct = a + b;
+  } else {
+    b = Math.floor(Math.random()*8)+1; // 1-8
+    a = b + Math.floor(Math.random()*10)+1; // a > b, result >= 1
+    correct = a - b;
+  }
+
+  // Build text
+  let text = tpl.t
+    .replace(/{name}/g, char.name)
+    .replace(/{a}/g, a)
+    .replace(/{b}/g, b)
+    .replace(/{obj}/g, objRaw);
+
+  showScreen('storyScreen');
+  document.getElementById('storyStreakEl').textContent = '🔥 ' + streak;
+  document.getElementById('storyCharEmoji').textContent = char.emoji;
+  document.getElementById('storyText').textContent = text;
+
+  const labels = {en:'Math Problems', tr:'Matematik Problemleri', nl:'Rekenproblemen'};
+  document.getElementById('storyLangLabel').textContent = labels[lang];
+
+  buildMathOptions('storyRow1','storyRow2', correct, (btn,sel,cor)=>onStorySelect(btn,sel,cor));
+
+  // Speak the question
+  const ttsLang = {en:'en-US', tr:'tr-TR', nl:'nl-NL'}[lang];
+  const ttsVoice = {en:'en-US-Neural2-F', tr:'tr-TR-Standard-B', nl:'nl-NL-Neural2-D'}[lang];
+  setTimeout(()=>speakLang(text, ttsLang, ttsVoice), 350);
+}
+
+function onStorySelect(btn, selected, correct){
+  onMathSelect('storyRow1','storyRow2','storyStreakEl', btn, selected, correct, ()=>loadStoryQuestion());
+}
+
+function speakLang(text, langCode, voiceName){
+  fetch('/.netlify/functions/tts', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text, langCode, voiceName})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(!data.audioContent) return;
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    audio.play();
+  })
+  .catch(()=>{});
+}
+
 // ─── DRAW ───────────────────────────────────────────────────
 function showDrawScreen(item){
   showScreen('drawScreen');
@@ -952,5 +1229,14 @@ function createCenterSparkles(){
   }
 }
 </script>
+<div class="lang-overlay hidden" id="langOverlay">
+  <div class="lang-box">
+    <div class="lang-title">🌍 Choose Language</div>
+    <button class="lang-btn en" onclick="startStoryMode('en')">🇬🇧 Math Problems</button>
+    <button class="lang-btn tr" onclick="startStoryMode('tr')">🇹🇷 Matematik Problemleri</button>
+    <button class="lang-btn nl" onclick="startStoryMode('nl')">🇳🇱 Rekenproblemen</button>
+    <button class="lang-close" onclick="document.getElementById('langOverlay').classList.add('hidden')">✕ Cancel</button>
+  </div>
+</div>
 </body>
 </html>
