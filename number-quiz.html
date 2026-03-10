@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Learn & Play">
+<title>Learn & Play!</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0%,#B8E4F9 60%,#dff0fb 100%);position:fixed;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+
+/* ── BG ── */
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.sun{position:absolute;top:26px;right:34px;width:70px;height:70px;background:radial-gradient(circle,#FFE066,#FFB700);border-radius:50%;box-shadow:0 0 40px 16px rgba(255,220,50,.35);animation:sunPulse 3s ease-in-out infinite;}
+@keyframes sunPulse{0%,100%{box-shadow:0 0 40px 16px rgba(255,220,50,.3)}50%{box-shadow:0 0 60px 28px rgba(255,220,50,.5)}}
+.cloud{position:absolute;background:white;border-radius:50px;opacity:.82;animation:drift linear infinite;}
+.cloud::before,.cloud::after{content:'';position:absolute;background:white;border-radius:50%;}
+.c1{width:110px;height:36px;top:68px;left:-120px;animation-duration:22s;}
+.c1::before{width:54px;height:54px;top:-28px;left:16px;}
+.c1::after{width:38px;height:38px;top:-18px;left:52px;}
+.c2{width:85px;height:28px;top:128px;left:-95px;animation-duration:30s;animation-delay:-12s;opacity:.68;}
+.c2::before{width:42px;height:42px;top:-22px;left:12px;}
+.c2::after{width:28px;height:28px;top:-14px;left:42px;}
+.c3{width:95px;height:32px;top:42px;left:-105px;animation-duration:38s;animation-delay:-6s;opacity:.55;}
+.c3::before{width:48px;height:48px;top:-26px;left:14px;}
+.c3::after{width:32px;height:32px;top:-16px;left:47px;}
+@keyframes drift{from{transform:translateX(-230px)}to{transform:translateX(calc(100vw + 230px))}}
+.grass{position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(180deg,#4CAF50 0%,#357a38 100%);border-radius:50% 50% 0 0/16px 16px 0 0;}
+
+.floaters{position:fixed;inset:0;pointer-events:none;z-index:1;}
+.floater{position:absolute;font-weight:900;opacity:.09;animation:floatUp linear infinite;color:#2c3e50;}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0);opacity:0}10%{opacity:.09}90%{opacity:.09}100%{transform:translateY(-20vh) rotate(360deg);opacity:0}}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:opacity .4s,transform .4s;padding:14px;}
+.screen.hidden{opacity:0;pointer-events:none;transform:scale(.95);}
+
+/* ── HOME ── */
+#homeScreen{gap:0;}
+.app-title{font-size:clamp(38px,10vw,68px);font-weight:900;color:white;text-shadow:0 4px 0 rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.1);letter-spacing:-1px;line-height:1;text-align:center;animation:titleBounce 2.2s ease-in-out infinite;margin-bottom:8px;}
+@keyframes titleBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.title-emoji{font-size:clamp(34px,8vw,58px);display:block;margin-bottom:6px;animation:spin 5s linear infinite;}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.mode-btns{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;justify-content:center;}
+.mode-btn{padding:18px 32px;font-family:'Nunito',sans-serif;font-size:clamp(17px,4.5vw,24px);font-weight:900;color:white;border:none;border-radius:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 6px 0 rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.12);transition:transform .1s,box-shadow .1s;min-width:130px;}
+.mode-btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.2);}
+.mode-btn.numbers{background:linear-gradient(135deg,#FF6B6B,#FF8E53);}
+.mode-btn.letters{background:linear-gradient(135deg,#4ECDC4,#74b9ff);}
+.mode-btn.count{background:linear-gradient(135deg,#FFB347,#ff6b9d);}
+.mode-btn.add{background:linear-gradient(135deg,#51CF66,#00b894);}
+.mode-btn.sub{background:linear-gradient(135deg,#FF6B6B,#ee5a24);}
+.mode-btn.mul{background:linear-gradient(135deg,#a29bfe,#6c5ce7);}
+.mode-btn.div{background:linear-gradient(135deg,#fd79a8,#e84393);}
+.mode-btn .bi{font-size:clamp(26px,7vw,40px);}
+.signature{font-family:'Caveat',cursive;font-size:clamp(19px,4.8vw,27px);color:rgba(15,45,90,.78);text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.5);margin-top:22px;letter-spacing:.5px;animation:sigFade 3s ease-in-out infinite alternate;}
+@keyframes sigFade{from{opacity:.7}to{opacity:1}}
+
+/* ── ADD CARD ── */
+.add-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.add-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0;flex-wrap:wrap;}
+.add-group{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:200px;}
+.add-emoji{font-size:clamp(22px,6vw,32px);line-height:1;animation:popIn .3s ease-out both;}
+.add-op{font-size:clamp(28px,7vw,40px);font-weight:900;color:#51CF66;margin:0 4px;}
+.add-q{font-size:clamp(32px,8vw,48px);font-weight:900;color:#FF6B6B;}
+.add-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:92%;max-width:440px;}
+.add-opts2{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:92%;max-width:440px;}
+
+/* ── COUNT CARD ── */
+.count-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);margin-bottom:4px;}
+.count-label{font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+.emoji-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:4px;}
+.emoji-item{font-size:clamp(28px,8vw,44px);line-height:1;animation:popIn .3s ease-out both;}
+@keyframes popIn{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* ── QUIZ ── */
+#quizScreen{gap:12px;justify-content:flex-start;padding-top:50px;}
+.q-header{display:flex;align-items:center;gap:10px;width:92%;max-width:440px;}
+.back-btn{width:40px;height:40px;border:none;border-radius:50%;background:rgba(255,255,255,.75);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.streak{margin-left:auto;background:rgba(255,255,255,.75);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:900;color:#e67e22;}
+.question-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.q-label{font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
+.q-word{font-size:clamp(20px,5.5vw,30px);font-weight:900;color:#2c3e50;line-height:1.2;}
+.letter-cue{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.cue-emoji{font-size:clamp(48px,13vw,78px);line-height:1;animation:cueBounce .7s ease-out;}
+@keyframes cueBounce{0%{transform:scale(.3)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+.cue-word{font-size:clamp(19px,5.2vw,28px);font-weight:900;color:#2c3e50;}
+.cue-hint{font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;margin-top:1px;}
+.options-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:92%;max-width:440px;}
+.options-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:92%;max-width:440px;}
+.opt-btn{height:clamp(80px,18vw,110px);border:none;border-radius:18px;font-family:'Nunito',sans-serif;font-size:clamp(24px,7vw,48px);font-weight:900;cursor:pointer;transition:transform .12s,box-shadow .12s;display:flex;align-items:center;justify-content:center;width:100%;}
+.opt-btn:active{transform:scale(.91) translateY(3px);}
+.opt-btn.c0{background:linear-gradient(135deg,#FF6B6B,#ee5a24);color:white;box-shadow:0 5px 0 #b83214;}
+.opt-btn.c1{background:linear-gradient(135deg,#4ECDC4,#00b894);color:white;box-shadow:0 5px 0 #007a60;}
+.opt-btn.c2{background:linear-gradient(135deg,#FFE66D,#f9ca24);color:#5f4000;box-shadow:0 5px 0 #c18e00;}
+.opt-btn.c3{background:linear-gradient(135deg,#74b9ff,#0984e3);color:white;box-shadow:0 5px 0 #0660ae;}
+.opt-btn.c4{background:linear-gradient(135deg,#fd79a8,#e84393);color:white;box-shadow:0 5px 0 #a01e68;}
+.opt-btn.c5{background:linear-gradient(135deg,#a29bfe,#6c5ce7);color:white;box-shadow:0 5px 0 #4530b5;}
+.opt-btn.correct{animation:correctPop .5s ease;background:linear-gradient(135deg,#51CF66,#2ecc71)!important;box-shadow:0 5px 0 #1e9e4e!important;color:white!important;}
+.opt-btn.wrong{animation:wrongShake .4s ease;background:linear-gradient(135deg,#FF6B6B,#e74c3c)!important;box-shadow:0 5px 0 #b03030!important;color:white!important;}
+@keyframes correctPop{0%{transform:scale(1)}30%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* ── DRAW ── */
+#drawScreen{gap:8px;justify-content:flex-start;padding-top:44px;}
+.draw-card{background:rgba(255,255,255,.93);border-radius:26px;padding:12px 14px;width:92%;max-width:400px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.draw-title{font-size:clamp(15px,4vw,21px);font-weight:900;color:#2c3e50;margin-bottom:1px;}
+.draw-hint{font-size:clamp(10px,2.6vw,13px);color:#bbb;font-weight:700;margin-bottom:8px;}
+.canvas-wrap{position:relative;margin:0 auto;border-radius:18px;overflow:hidden;background:#f5f6ff;touch-action:none;border:3px solid rgba(150,150,200,.18);}
+#guideCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+#drawCanvas{display:block;width:100%;touch-action:none;}
+
+
+
+
+
+.ok-btn{margin-top:10px;padding:13px 44px;background:linear-gradient(135deg,#51CF66,#2ecc71);color:white;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:clamp(15px,4vw,21px);font-weight:900;cursor:pointer;box-shadow:0 5px 0 #1e9e4e,0 8px 18px rgba(81,207,102,.4);letter-spacing:1px;}
+.ok-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1e9e4e;}
+.clear-btn{margin-top:7px;padding:9px 26px;background:linear-gradient(135deg,#fd79a8,#e84393);color:white;border:none;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 3px 0 #a01e68;}
+.clear-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #a01e68;}
+
+/* ── FX ── */
+.sparkle{position:fixed;pointer-events:none;animation:sparkleAnim 1.5s ease-out forwards;z-index:999;}
+@keyframes sparkleAnim{0%{transform:scale(0) rotate(0);opacity:1}50%{transform:scale(1.5) rotate(180deg);opacity:1}100%{transform:scale(0) rotate(360deg) translateY(-60px);opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  <div class="grass"></div>
+</div>
+<div class="floaters" id="floaters"></div>
+
+<!-- HOME -->
+<div class="screen" id="homeScreen">
+  <div class="app-title"><span class="title-emoji">🌟</span>Learn &amp; Play!</div>
+  <div class="mode-btns">
+    <button class="mode-btn numbers" onclick="startMode('numbers')">
+      <span class="bi">🔢</span>Numbers
+    </button>
+    <button class="mode-btn letters" onclick="startMode('letters')">
+      <span class="bi">🔤</span>Letters
+    </button>
+    <button class="mode-btn count" onclick="startMode('count')">
+      <span class="bi">🌸</span>Count!
+    </button>
+    <button class="mode-btn add" onclick="startMode('add')">
+      <span class="bi">➕</span>Add!
+    </button>
+    <button class="mode-btn sub" onclick="startMode('sub')">
+      <span class="bi">➖</span>Subtract!
+    </button>
+    <button class="mode-btn mul" onclick="startMode('mul')">
+      <span class="bi">✖️</span>Multiply!
+    </button>
+    <button class="mode-btn div" onclick="startMode('div')">
+      <span class="bi">➗</span>Divide!
+    </button>
+  </div>
+  <div class="signature">Made with love</div>
+  <div style="font-family:'Caveat',cursive;font-size:clamp(12px,3vw,15px);color:rgba(15,45,90,0.55);margin-top:6px;letter-spacing:.3px;">contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a1c1b080f11181b16191343493a1d171b131654191517">[email&#160;protected]</a></div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen hidden" id="quizScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="streakEl">🔥 0</div>
+  </div>
+  <div class="question-card">
+    <div class="q-label" id="qLabel">Which number is...</div>
+    <div id="qContent"></div>
+  </div>
+  <div class="options-grid" id="optionsRow1"></div>
+  <div class="options-row2" id="optionsRow2"></div>
+</div>
+
+<!-- COUNT -->
+<div class="screen hidden" id="countScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="countStreakEl">🔥 0</div>
+  </div>
+  <div class="count-card">
+    <div class="count-label">How many? 🤔</div>
+    <div class="emoji-grid" id="emojiGrid"></div>
+  </div>
+  <div class="options-grid" id="countRow1"></div>
+  <div class="options-row2" id="countRow2"></div>
+</div>
+
+<!-- ADD -->
+<div class="screen hidden" id="addScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="addStreakEl">🔥 0</div>
+  </div>
+  <div class="add-card">
+    <div class="add-row" id="addGroupA"></div>
+    <div class="add-row"><span class="add-op">+</span></div>
+    <div class="add-row" id="addGroupB"></div>
+    <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="addFormula"></div>
+  </div>
+  <div class="add-opts" id="addRow1"></div>
+  <div class="add-opts2" id="addRow2"></div>
+</div>
+
+<!-- SUB -->
+<div class="screen hidden" id="subScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="subStreakEl">🔥 0</div>
+  </div>
+  <div class="add-card">
+    <div class="add-row" id="subGroupA"></div>
+    <div class="add-row"><span class="add-op" style="color:#FF6B6B">−</span></div>
+    <div class="add-row" id="subGroupB"></div>
+    <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="subFormula"></div>
+  </div>
+  <div class="add-opts" id="subRow1"></div>
+  <div class="add-opts2" id="subRow2"></div>
+</div>
+
+<!-- MUL -->
+<div class="screen hidden" id="mulScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="mulStreakEl">🔥 0</div>
+  </div>
+  <div class="add-card">
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">How many in total?</div>
+    <div class="add-row" id="mulGroups"></div>
+    <div class="add-row"><span class="add-op" style="color:#a29bfe">×</span></div>
+    <div class="add-row" id="mulFormula" style="font-size:clamp(20px,5vw,28px);font-weight:900;color:#2c3e50;"></div>
+    <div class="add-row"><span class="add-op">= </span><span class="add-q">?</span></div>
+  </div>
+  <div class="add-opts" id="mulRow1"></div>
+  <div class="add-opts2" id="mulRow2"></div>
+</div>
+
+<!-- DIV -->
+<div class="screen hidden" id="divScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="divStreakEl">🔥 0</div>
+  </div>
+  <div class="add-card">
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Split into equal groups!</div>
+    <div class="add-row" id="divTotal"></div>
+    <div class="add-row"><span class="add-op" style="color:#fd79a8">÷</span></div>
+    <div class="add-row" id="divGroups"></div>
+    <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="divFormula"></div>
+  </div>
+  <div class="add-opts" id="divRow1"></div>
+  <div class="add-opts2" id="divRow2"></div>
+</div>
+
+<!-- DRAW -->
+<div class="screen hidden" id="drawScreen">
+  <div class="draw-card">
+    <div class="draw-title" id="drawTitle">✏️ Now draw it!</div>
+    <div class="draw-hint" id="drawHint">Trace with your finger</div>
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="guideCanvas"></canvas>
+      <canvas id="drawCanvas"></canvas>
+    </div>
+    <button class="ok-btn" onclick="checkDrawing()">✅ OK!</button><br>
+    <button class="clear-btn" onclick="clearDraw()">🗑️ Clear</button>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ─── DATA ───────────────────────────────────────────────────
+const NUMBERS=[1,2,3,4,5,6,7,8,9,10];
+const NUM_NAMES=['','one','two','three','four','five','six','seven','eight','nine','ten'];
+const NUM_WORDS=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
+
+const LETTERS=[
+  {l:'A',word:'Apple',    emoji:'🍎'},{l:'B',word:'Boat',     emoji:'⛵'},
+  {l:'C',word:'Cat',      emoji:'🐱'},{l:'D',word:'Dog',      emoji:'🐶'},
+  {l:'E',word:'Elephant', emoji:'🐘'},{l:'F',word:'Fish',     emoji:'🐟'},
+  {l:'G',word:'Grapes',   emoji:'🍇'},{l:'H',word:'Hat',      emoji:'🎩'},
+  {l:'I',word:'Ice Cream',emoji:'🍦'},{l:'J',word:'Jellyfish',emoji:'🪼'},
+  {l:'K',word:'Kite',     emoji:'🪁'},{l:'L',word:'Lion',     emoji:'🦁'},
+  {l:'M',word:'Monkey',   emoji:'🐒'},{l:'N',word:'Nose',     emoji:'👃'},
+  {l:'O',word:'Orange',   emoji:'🍊'},{l:'P',word:'Pizza',    emoji:'🍕'},
+  {l:'Q',word:'Queen',    emoji:'👸'},{l:'R',word:'Rainbow',  emoji:'🌈'},
+  {l:'S',word:'Star',     emoji:'⭐'},{l:'T',word:'Train',    emoji:'🚂'},
+  {l:'U',word:'Umbrella', emoji:'☂️'},{l:'V',word:'Violin',   emoji:'🎻'},
+  {l:'W',word:'Whale',    emoji:'🐋'},{l:'Y',word:'Yummy',    emoji:'😋'},{l:'Z',word:'Zebra',    emoji:'🦓'},
+];
+
+
+
+// ─── STATE ──────────────────────────────────────────────────
+let mode='numbers';
+let pool=[];
+let poolIdx=0;
+let streak=0;
+let currentItem=null;
+let drawCtx,guideCtx,canvasW,canvasH;
+let isDrawing=false;
+let drawnPixels=new Set();
+let guidePixels=new Set();
+let audioCtx=null;
+
+// ─── AUDIO ──────────────────────────────────────────────────
+function getAC(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+
+function playDing(){
+  try{
+    const ctx=getAC();
+    [[523.25,0,'sine'],[659.25,.13,'sine'],[783.99,.27,'sine'],[1046.5,.45,'triangle']].forEach(([f,t,type])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type=type;o.frequency.value=f;
+      const s=ctx.currentTime+t;
+      g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.32,s+.05);
+      g.gain.exponentialRampToValueAtTime(.001,s+.45);
+      o.start(s);o.stop(s+.5);
+    });
+  }catch(e){}
+}
+
+function playWrong(){
+  try{
+    const ctx=getAC();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(280,ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(110,ctx.currentTime+.35);
+    g.gain.setValueAtTime(.18,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.4);
+    o.start();o.stop(ctx.currentTime+.4);
+  }catch(e){}
+}
+
+function playTryAgain(){
+  try{
+    const ctx=getAC();
+    [[440,0],[380,.15]].forEach(([f,t])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=f;
+      const s=ctx.currentTime+t;
+      g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.2,s+.05);
+      g.gain.exponentialRampToValueAtTime(.001,s+.3);
+      o.start(s);o.stop(s+.35);
+    });
+  }catch(e){}
+}
+
+// ─── SPEECH ─────────────────────────────────────────────────
+function speak(text){
+  fetch('/.netlify/functions/tts', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(!data.audioContent) return;
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    audio.play();
+  })
+  .catch(() => {
+    // Fallback to browser TTS if API fails
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang='en-US'; u.rate=0.82; u.pitch=1.4;
+    window.speechSynthesis.speak(u);
+  });
+}
+
+// ─── FLOATERS ───────────────────────────────────────────────
+function initFloaters(){
+  const el=document.getElementById('floaters');el.innerHTML='';
+  const src=mode==='numbers'?'1234567890':'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let i=0;i<12;i++){
+    const d=document.createElement('div');d.className='floater';
+    d.textContent=src[Math.floor(Math.random()*src.length)];
+    d.style.cssText=`left:${Math.random()*100}vw;font-size:${28+Math.random()*28}px;animation-duration:${9+Math.random()*13}s;animation-delay:${-Math.random()*22}s;`;
+    el.appendChild(d);
+  }
+}
+initFloaters();
+
+// ─── SCREENS ────────────────────────────────────────────────
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+function goHome(){window.speechSynthesis&&window.speechSynthesis.cancel();showScreen('homeScreen');}
+
+// ─── POOL ───────────────────────────────────────────────────
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function getNext(){
+  if(poolIdx>=pool.length){
+    // reshuffle but avoid repeating last item at start
+    const last=pool[pool.length-1];
+    pool=shuffle([...pool]);
+    if(pool.length>1&&pool[0]===last){pool.push(pool.shift());}
+    poolIdx=0;
+  }
+  return pool[poolIdx++];
+}
+
+// ─── START ──────────────────────────────────────────────────
+function startMode(m){
+  getAC();
+
+  mode=m;streak=0;
+  initFloaters();
+  if(mode==='add'){
+    loadAddQuestion();
+  } else if(mode==='sub'){
+    loadSubQuestion();
+  } else if(mode==='mul'){
+    loadMulQuestion();
+  } else if(mode==='div'){
+    loadDivQuestion();
+  } else if(mode==='count'){
+    countPool=shuffle([...NUMBERS]);
+    countPoolIdx=0;
+    loadCountQuestion();
+  } else {
+    pool=mode==='numbers'?shuffle([...NUMBERS]):shuffle([...LETTERS]);
+    poolIdx=0;
+    loadQuestion();
+  }
+}
+
+// ─── COUNT DATA ─────────────────────────────────────────────
+const COUNT_EMOJIS=['🌸','🐶','⭐','🍎','🦋','🐱','🌙','🍕','🐸','🌈','🐠','🦄','🍓','🐣','🎈','🐧','🍦','🌻','🐢','🎵'];
+let countPool=[];
+let countPoolIdx=0;
+let currentCount=0;
+
+function getNextCount(){
+  if(countPoolIdx>=countPool.length){
+    const last=countPool[countPool.length-1];
+    countPool=shuffle([...countPool]);
+    if(countPool.length>1&&countPool[0]===last)countPool.push(countPool.shift());
+    countPoolIdx=0;
+  }
+  return countPool[countPoolIdx++];
+}
+
+function loadCountQuestion(){
+  currentCount=getNextCount();
+  showScreen('countScreen');
+  document.getElementById('countStreakEl').textContent='🔥 '+streak;
+
+  // Pick a random emoji set
+  const emoji=COUNT_EMOJIS[Math.floor(Math.random()*COUNT_EMOJIS.length)];
+
+  // Build emoji grid with staggered animation
+  const grid=document.getElementById('emojiGrid');
+  grid.innerHTML='';
+  for(let i=0;i<currentCount;i++){
+    const span=document.createElement('span');
+    span.className='emoji-item';
+    span.textContent=emoji;
+    span.style.animationDelay=(i*0.06)+'s';
+    grid.appendChild(span);
+  }
+
+  // Build 5 answer options
+  const correct=currentCount;
+  let wrongs=shuffle(NUMBERS.filter(x=>x!==correct)).slice(0,4);
+  const opts=shuffle([correct,...wrongs]);
+
+  const row1=document.getElementById('countRow1');
+  const row2=document.getElementById('countRow2');
+  row1.innerHTML='';row2.innerHTML='';
+  opts.forEach((num,idx)=>{
+    const btn=document.createElement('button');
+    btn.className=`opt-btn c${idx}`;
+    btn.textContent=num;
+    btn.dataset.key=String(num);
+    btn.onclick=()=>onCountSelect(btn,num,correct);
+    (idx<3?row1:row2).appendChild(btn);
+  });
+
+  // no speech for count mode
+}
+
+function onCountSelect(btn,selected,correct){
+  if(selected===correct){
+    document.querySelectorAll('#countRow1 .opt-btn,#countRow2 .opt-btn').forEach(b=>b.onclick=null);
+    btn.classList.add('correct');playDing();createSparkles(btn);streak++;
+    document.getElementById('countStreakEl').textContent='🔥 '+streak;
+    speak(NUM_NAMES[correct]);
+    setTimeout(()=>showCountDraw(correct),680);
+  } else {
+    btn.classList.add('wrong');playWrong();
+    btn.onclick=null;
+    setTimeout(()=>{btn.classList.remove('wrong');btn.onclick=()=>onCountSelect(btn,selected,correct);},650);
+  }
+}
+
+function showCountDraw(num){
+  showScreen('drawScreen');
+  document.getElementById('drawTitle').textContent='✏️ Now draw it!';
+  document.getElementById('drawHint').textContent='Draw the number '+num+' with your finger';
+  initCanvas(num);
+}
+
+// ─── QUIZ ───────────────────────────────────────────────────
+function loadQuestion(){
+  currentItem=getNext();
+  showScreen('quizScreen');
+  document.getElementById('streakEl').textContent='🔥 '+streak;
+
+  if(mode==='numbers'){
+    const n=currentItem;
+    document.getElementById('qLabel').textContent='Which number is...';
+    document.getElementById('qContent').innerHTML=`<div class="q-word">Number <strong>${NUM_WORDS[n]}</strong></div>`;
+    const opts=buildOptList(NUMBERS,n,x=>x,x=>x);
+    renderOptions(opts,n,x=>x,x=>x);
+    setTimeout(()=>speak('Number '+NUM_NAMES[n]),380);
+  } else {
+    const obj=currentItem;
+    document.getElementById('qLabel').textContent='Which letter starts...';
+    document.getElementById('qContent').innerHTML=
+      `<div class="letter-cue"><div class="cue-emoji">${obj.emoji}</div><div class="cue-word"><span style="color:rgba(180,180,220,0.4)">_</span>${obj.word.slice(1)}!</div><div class="cue-hint">What is the first letter?</div></div>`;
+    const opts=buildOptList(LETTERS,obj,o=>o.l,o=>o.l);
+    renderOptions(opts,obj.l,o=>o.l,o=>o.l);
+    setTimeout(()=>speak(obj.word),380);
+  }
+}
+
+function buildOptList(src,correct,keyFn,displayFn){
+  const ck=keyFn(correct);
+  let wrongs=shuffle(src.filter(x=>keyFn(x)!==ck)).slice(0,4);
+  return shuffle([correct,...wrongs]);
+}
+
+function renderOptions(opts,correctKey,keyFn,displayFn){
+  const row1=document.getElementById('optionsRow1');
+  const row2=document.getElementById('optionsRow2');
+  row1.innerHTML='';
+  row2.innerHTML='';
+  opts.forEach((item,idx)=>{
+    const btn=document.createElement('button');
+    btn.className=`opt-btn c${idx}`;
+    btn.textContent=displayFn(item);
+    btn.dataset.key=String(keyFn(item));
+    btn.onclick=()=>onSelect(btn,String(keyFn(item)),String(correctKey));
+    (idx<3?row1:row2).appendChild(btn);
+  });
+}
+
+function onSelect(btn,selected,correct){
+  if(String(selected)===String(correct)){
+    document.querySelectorAll('.opt-btn').forEach(b=>b.onclick=null);
+    btn.classList.add('correct');playDing();createSparkles(btn);streak++;
+    document.getElementById('streakEl').textContent='🔥 '+streak;
+    setTimeout(()=>showDrawScreen(currentItem),680);
+  } else {
+    btn.classList.add('wrong');playWrong();
+    const origOnclick=()=>onSelect(btn,selected,correct);
+    btn.onclick=null;
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      btn.onclick=origOnclick;
+    },650);
+  }
+}
+
+
+// ─── SUBTRACT MODE ──────────────────────────────────────────
+let subA=0, subB=0;
+
+function loadSubQuestion(){
+  // a - b >= 1, both 1-10
+  subB=Math.floor(Math.random()*9)+1;          // 1-9
+  subA=subB+Math.floor(Math.random()*(10-subB))+1; // subA > subB, max 10
+  const correct=subA-subB; // always >= 1
+
+  showScreen('subScreen');
+  document.getElementById('subStreakEl').textContent='🔥 '+streak;
+  const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
+
+  // Group A — full set, plain
+  const gA=document.getElementById('subGroupA');
+  gA.innerHTML='';
+  for(let i=0;i<subA;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.04)+'s';
+    gA.appendChild(s);
+  }
+
+  // Group B — plain
+  const gB=document.getElementById('subGroupB');
+  gB.innerHTML='';
+  for(let i=0;i<subB;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.04)+'s';
+    gB.appendChild(s);
+  }
+
+  // Formula
+  document.getElementById('subFormula').textContent=subA+' − '+subB+' = ?';
+
+  buildMathOptions('subRow1','subRow2',correct,(btn,sel,cor)=>onSubSelect(btn,sel,cor));
+  setTimeout(()=>speak(NUM_NAMES[subA]+' minus '+NUM_NAMES[subB]),350);
+}
+
+function onSubSelect(btn,selected,correct){
+  onMathSelect('subRow1','subRow2','subStreakEl',btn,selected,correct,()=>loadSubQuestion());
+}
+
+// ─── MULTIPLY MODE ──────────────────────────────────────────
+let mulA=0, mulB=0;
+
+function loadMulQuestion(){
+  // a x b, both 1-5, result max 10 (so child can count groups)
+  mulA=Math.floor(Math.random()*9)+1;  // 1-9
+  mulB=Math.floor(Math.random()*5)+1;  // 1-5
+  const correct=mulA*mulB;
+
+  showScreen('mulScreen');
+  document.getElementById('mulStreakEl').textContent='🔥 '+streak;
+  const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
+
+  // Show: [mulA emojis] X [mulB emojis]
+  const gEl=document.getElementById('mulGroups');
+  gEl.innerHTML='';
+  gEl.style.cssText='display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;';
+
+  // Left group: mulA emojis
+  const leftGrp=document.createElement('div');
+  leftGrp.style.cssText='display:flex;flex-wrap:wrap;gap:3px;justify-content:center;background:rgba(162,155,254,0.12);border-radius:10px;padding:6px;max-width:120px;';
+  for(let i=0;i<mulA;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.05)+'s';
+    leftGrp.appendChild(s);
+  }
+  gEl.appendChild(leftGrp);
+
+  // X sign
+  const xSign=document.createElement('span');
+  xSign.style.cssText='font-size:clamp(24px,6vw,36px);font-weight:900;color:#a29bfe;margin:0 4px;';
+  xSign.textContent='×';
+  gEl.appendChild(xSign);
+
+  // Right group: mulB emojis
+  const rightGrp=document.createElement('div');
+  rightGrp.style.cssText='display:flex;flex-wrap:wrap;gap:3px;justify-content:center;background:rgba(162,155,254,0.12);border-radius:10px;padding:6px;max-width:120px;';
+  for(let i=0;i<mulB;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.05)+'s';
+    rightGrp.appendChild(s);
+  }
+  gEl.appendChild(rightGrp);
+
+  document.getElementById('mulFormula').textContent=mulA+' × '+mulB+' = ?';
+
+  buildMathOptions('mulRow1','mulRow2',correct,(btn,sel,cor)=>onMulSelect(btn,sel,cor));
+  setTimeout(()=>speak(NUM_NAMES[mulA]+' times '+NUM_NAMES[mulB]),350);
+}
+
+function onMulSelect(btn,selected,correct){
+  onMathSelect('mulRow1','mulRow2','mulStreakEl',btn,selected,correct,()=>loadMulQuestion());
+}
+
+// ─── SHARED MATH HELPERS ────────────────────────────────────
+function buildMathOptions(row1Id,row2Id,correct,handler){
+  const all=[];
+  for(let n=1;n<=20;n++) all.push(n);
+  let wrongs=all.filter(n=>n!==correct);
+  const nearby=wrongs.filter(n=>Math.abs(n-correct)<=4);
+  const far=wrongs.filter(n=>Math.abs(n-correct)>4);
+  const opts=shuffle([correct,...[...nearby,...far].slice(0,5)]);
+  const row1=document.getElementById(row1Id);
+  const row2=document.getElementById(row2Id);
+  row1.innerHTML='';row2.innerHTML='';
+  opts.forEach((num,idx)=>{
+    const btn=document.createElement('button');
+    btn.className=`opt-btn c${idx%6}`;
+    btn.textContent=num;
+    btn.dataset.key=String(num);
+    btn.onclick=()=>handler(btn,num,correct);
+    (idx<3?row1:row2).appendChild(btn);
+  });
+}
+
+function onMathSelect(row1Id,row2Id,streakId,btn,selected,correct,nextFn){
+  if(selected===correct){
+    document.querySelectorAll(`#${row1Id} .opt-btn,#${row2Id} .opt-btn`).forEach(b=>b.onclick=null);
+    btn.classList.add('correct');playDing();createSparkles(btn);streak++;
+    document.getElementById(streakId).textContent='🔥 '+streak;
+    setTimeout(()=>nextFn(),800);
+  } else {
+    btn.classList.add('wrong');playWrong();
+    btn.onclick=null;
+    setTimeout(()=>{btn.classList.remove('wrong');btn.onclick=()=>onMathSelect(row1Id,row2Id,streakId,btn,selected,correct,nextFn);},650);
+  }
+}
+
+
+// ─── DIVIDE MODE ────────────────────────────────────────────
+let divA=0, divB=0;
+
+function loadDivQuestion(){
+  // result = divA / divB, all integers 1-10
+  // pick result first (1-5), then divisor (2-5), total = result*divisor <= 10
+  const result=Math.floor(Math.random()*4)+1;   // 1-4
+  divB=Math.floor(Math.random()*3)+2;            // 2-4
+  divA=result*divB;                               // always clean
+  // ensure divA <= 10
+  if(divA>10){ divB=2; divA=result*divB; }
+  const correct=result;
+
+  showScreen('divScreen');
+  document.getElementById('divStreakEl').textContent='🔥 '+streak;
+  const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
+
+  // Show total emojis
+  const tot=document.getElementById('divTotal');
+  tot.innerHTML='';
+  for(let i=0;i<divA;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.04)+'s';
+    tot.appendChild(s);
+  }
+
+  // Show divisor: just divB emojis (the number we divide by)
+  const grpEl=document.getElementById('divGroups');
+  grpEl.innerHTML='';
+  for(let i=0;i<divB;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.05)+'s';
+    grpEl.appendChild(s);
+  }
+
+  document.getElementById('divFormula').textContent=divA+' ÷ '+divB+' = ?';
+  buildMathOptions('divRow1','divRow2',correct,(btn,sel,cor)=>onDivSelect(btn,sel,cor));
+  setTimeout(()=>speak(NUM_NAMES[divA]+' divided by '+NUM_NAMES[divB]),350);
+}
+
+function onDivSelect(btn,selected,correct){
+  onMathSelect('divRow1','divRow2','divStreakEl',btn,selected,correct,()=>loadDivQuestion());
+}
+
+// ─── DRAW ───────────────────────────────────────────────────
+function showDrawScreen(item){
+  showScreen('drawScreen');
+  const label=mode==='numbers'?item:item.l;
+  document.getElementById('drawTitle').textContent='✏️ Now draw it!';
+  document.getElementById('drawHint').textContent=`Trace the ${mode==='numbers'?'number':'letter'} "${label}" with your finger`;
+  initCanvas(label);
+  speak(mode==='numbers'?NUM_NAMES[item]:item.word);
+}
+
+function initCanvas(char){
+  const wrap=document.getElementById('canvasWrap');
+  const size=Math.min(wrap.clientWidth||250,268);
+  canvasW=canvasH=size;
+  const dc=document.getElementById('drawCanvas');
+  const gc=document.getElementById('guideCanvas');
+  dc.width=gc.width=size;dc.height=gc.height=size;
+  wrap.style.height=size+'px';
+  drawCtx=dc.getContext('2d');guideCtx=gc.getContext('2d');
+
+  // Draw ghost guide
+  guideCtx.clearRect(0,0,size,size);
+  const fs=size*(mode==='numbers'||mode==='count'?0.78:0.70);
+  guideCtx.font=`900 ${fs}px Nunito`;
+  guideCtx.textAlign='center';guideCtx.textBaseline='middle';
+  guideCtx.fillStyle='rgba(150,150,220,0.22)';
+  guideCtx.fillText(char,size/2,size/2);
+  guideCtx.strokeStyle='rgba(120,120,210,0.40)';
+  guideCtx.lineWidth=2;guideCtx.setLineDash([7,5]);
+  guideCtx.strokeText(char,size/2,size/2);
+  guideCtx.setLineDash([]);
+
+  drawCtx.clearRect(0,0,size,size);
+  drawnPixels=new Set();isDrawing=false;
+
+  dc.ontouchstart=e=>{e.preventDefault();isDrawing=true;const p=getPos(e,dc);drawStart(p.x,p.y);};
+  dc.ontouchmove=e=>{e.preventDefault();if(!isDrawing)return;const p=getPos(e,dc);drawMove(p.x,p.y);};
+  dc.ontouchend=e=>{e.preventDefault();isDrawing=false;};
+  dc.onmousedown=e=>{isDrawing=true;const p=getPos(e,dc);drawStart(p.x,p.y);};
+  dc.onmousemove=e=>{if(!isDrawing)return;const p=getPos(e,dc);drawMove(p.x,p.y);};
+  dc.onmouseup=()=>{isDrawing=false;};
+}
+
+function getPos(e,canvas){
+  const r=canvas.getBoundingClientRect();
+  const sx=canvas.width/r.width,sy=canvas.height/r.height;
+  const src=e.touches?e.touches[0]:e;
+  return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};
+}
+
+function drawStart(x,y){drawCtx.beginPath();drawCtx.moveTo(x,y);}
+function drawMove(x,y){
+  drawCtx.lineTo(x,y);
+  drawCtx.strokeStyle='#FF6B6B';drawCtx.lineWidth=canvasW*.068;
+  drawCtx.lineCap='round';drawCtx.lineJoin='round';
+  drawCtx.stroke();drawCtx.beginPath();drawCtx.moveTo(x,y);
+  const r=Math.ceil(canvasW*.034);
+  for(let dx=-r;dx<=r;dx+=3)for(let dy=-r;dy<=r;dy+=3)
+    if(dx*dx+dy*dy<=r*r){const px=Math.round(x+dx),py=Math.round(y+dy);
+      if(px>=0&&px<canvasW&&py>=0&&py<canvasH)drawnPixels.add(px+','+py);}
+}
+
+function clearDraw(){
+  drawCtx.clearRect(0,0,canvasW,canvasH);
+  drawnPixels=new Set();
+}
+
+function checkDrawing(){
+  playDing();createCenterSparkles();
+  setTimeout(()=>nextQuestion(),900);
+}
+
+function redrawGuide(){
+  // Just reinit canvas guide visuals without resetting draw layer
+  const char=mode==='numbers'||mode==='count'?String(currentCount||currentItem):currentItem.l;
+  initCanvasGuideOnly(char);
+}
+
+
+// ─── ADD MODE ────────────────────────────────────────────────
+const ADD_EMOJIS=['🍎','🐶','⭐','🌸','🍕','🐱','🎈','🦋','🍦','🐸','🌈','🐠','🍓','🐣','🎵','🐧','🌻','🐢','🍇','🦄'];
+let addA=0, addB=0;
+
+function loadAddQuestion(){
+  // Pick two numbers 1-10 that sum to max 15 (reasonable for 3.5yo)
+  addA=Math.floor(Math.random()*9)+1;  // 1-9
+  addB=Math.floor(Math.random()*(10-addA))+1; // 1 to (10-addA)
+  const correct=addA+addB;
+
+  showScreen('addScreen');
+  document.getElementById('addStreakEl').textContent='🔥 '+streak;
+
+  // Pick one emoji type per question
+  const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
+
+  // Group A
+  const gA=document.getElementById('addGroupA');
+  gA.innerHTML='';
+  for(let i=0;i<addA;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.05)+'s';
+    gA.appendChild(s);
+  }
+
+  // Group B
+  const gB=document.getElementById('addGroupB');
+  gB.innerHTML='';
+  for(let i=0;i<addB;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=(i*0.05)+'s';
+    gB.appendChild(s);
+  }
+
+  // Build 6 options — correct + 5 wrong nearby numbers
+  const all=[];
+  for(let n=1;n<=20;n++) all.push(n);
+  let wrongs=all.filter(n=>n!==correct);
+  // Prefer nearby numbers (correct±1 to ±5) to make it educational
+  const nearby=wrongs.filter(n=>Math.abs(n-correct)<=4);
+  const far=wrongs.filter(n=>Math.abs(n-correct)>4);
+  const pool=[...nearby,...far];
+  const selected=pool.slice(0,5);
+  const opts=shuffle([correct,...selected]);
+
+  const row1=document.getElementById('addRow1');
+  const row2=document.getElementById('addRow2');
+  row1.innerHTML='';row2.innerHTML='';
+  opts.forEach((num,idx)=>{
+    const btn=document.createElement('button');
+    btn.className=`opt-btn c${idx%6}`;
+    btn.textContent=num;
+    btn.dataset.key=String(num);
+    btn.onclick=()=>onAddSelect(btn,num,correct);
+    (idx<3?row1:row2).appendChild(btn);
+  });
+
+  // Speak: "five plus three"
+  document.getElementById('addFormula').textContent=addA+' + '+addB+' = ?';
+  setTimeout(()=>speak(NUM_NAMES[addA]+' plus '+NUM_NAMES[addB]),350);
+}
+
+function onAddSelect(btn,selected,correct){
+  if(selected===correct){
+    document.querySelectorAll('#addRow1 .opt-btn,#addRow2 .opt-btn').forEach(b=>b.onclick=null);
+    btn.classList.add('correct');playDing();createSparkles(btn);streak++;
+    document.getElementById('addStreakEl').textContent='🔥 '+streak;
+    setTimeout(()=>loadAddQuestion(),800);
+  } else {
+    btn.classList.add('wrong');playWrong();
+    btn.onclick=null;
+    setTimeout(()=>{btn.classList.remove('wrong');btn.onclick=()=>onAddSelect(btn,selected,correct);},650);
+  }
+}
+
+function nextQuestion(){
+  if(mode==='count') loadCountQuestion();
+  else loadQuestion();
+}
+
+// ─── FX ─────────────────────────────────────────────────────
+const EMOJIS=['⭐','🌟','✨','🎉','💫','🎊','🌈'];
+function createSparkles(el){
+  const r=el.getBoundingClientRect();
+  for(let i=0;i<6;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    s.textContent=EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+    s.style.fontSize=(16+Math.random()*14)+'px';
+    s.style.left=(r.left+Math.random()*r.width)+'px';
+    s.style.top=(r.top+Math.random()*r.height)+'px';
+    s.style.animationDelay=(i*.07)+'s';
+    document.body.appendChild(s);setTimeout(()=>s.remove(),2000);
+  }
+}
+function createCenterSparkles(){
+  for(let i=0;i<10;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    s.textContent=EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+    s.style.fontSize=(20+Math.random()*20)+'px';
+    s.style.left=(window.innerWidth*.12+Math.random()*window.innerWidth*.76)+'px';
+    s.style.top=(window.innerHeight*.12+Math.random()*window.innerHeight*.7)+'px';
+    s.style.animationDelay=(Math.random()*.4)+'s';
+    s.style.animation='sparkleAnim 1.5s ease-out forwards';
+    s.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),2000);
+  }
+}
+</script>
+</body>
+</html>
