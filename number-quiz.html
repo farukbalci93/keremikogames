@@ -163,7 +163,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     </button>
   </div>
   <div class="signature">Made with love</div>
-  <div style="font-family:'Caveat',cursive;font-size:clamp(12px,3vw,15px);color:rgba(15,45,90,0.55);margin-top:6px;letter-spacing:.3px;">contact: farukbalci93@gmail.com</div>
+  <div style="font-family:'Caveat',cursive;font-size:clamp(12px,3vw,15px);color:rgba(15,45,90,0.55);margin-top:6px;letter-spacing:.3px;">contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a1c1b080f11181b16191343493a1d171b131654191517">[email&#160;protected]</a></div>
 </div>
 
 <!-- QUIZ -->
@@ -274,7 +274,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ─── DATA ───────────────────────────────────────────────────
 const NUMBERS=[1,2,3,4,5,6,7,8,9,10];
 const NUM_NAMES=['','one','two','three','four','five','six','seven','eight','nine','ten'];
@@ -358,25 +358,25 @@ function playTryAgain(){
 
 // ─── SPEECH ─────────────────────────────────────────────────
 function speak(text){
-  if(!window.speechSynthesis)return;
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';
-  u.rate=0.82;
-  u.pitch=1.4;
-  u.volume=1;
-  const vs=window.speechSynthesis.getVoices();
-  // Prefer energetic/child-friendly voices, avoid 'Eloquence' or 'compact' voices
-  const preferred=['Samantha','Karen','Moira','Tessa','Victoria','Nicky','Ava'];
-  let v=null;
-  for(const name of preferred){
-    v=vs.find(x=>x.name.includes(name)&&x.lang.startsWith('en'));
-    if(v)break;
-  }
-  if(!v)v=vs.find(x=>x.lang==='en-US'&&!x.name.toLowerCase().includes('compact'));
-  if(!v)v=vs.find(x=>x.lang.startsWith('en'));
-  if(v)u.voice=v;
-  window.speechSynthesis.speak(u);
+  fetch('/.netlify/functions/tts', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(!data.audioContent) return;
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    audio.play();
+  })
+  .catch(() => {
+    // Fallback to browser TTS if API fails
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang='en-US'; u.rate=0.82; u.pitch=1.4;
+    window.speechSynthesis.speak(u);
+  });
 }
 window.speechSynthesis&&window.speechSynthesis.getVoices();
 
@@ -949,12 +949,4 @@ function createCenterSparkles(){
     s.style.fontSize=(20+Math.random()*20)+'px';
     s.style.left=(window.innerWidth*.12+Math.random()*window.innerWidth*.76)+'px';
     s.style.top=(window.innerHeight*.12+Math.random()*window.innerHeight*.7)+'px';
-    s.style.animationDelay=(i*.06)+'s';
-    document.body.appendChild(s);setTimeout(()=>s.remove(),2200);
-  }
-}
-
-if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
-</script>
-</body>
-</html>
+    s.style
