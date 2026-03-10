@@ -972,6 +972,17 @@ function startStoryMode(lang){
   loadStoryQuestion();
 }
 
+function splitObj(raw){
+  if(!raw) return {word:'', emoji:''};
+  // Find where emoji starts by checking char codes
+  let splitIdx = raw.length;
+  for(let i=0; i<raw.length; i++){
+    const code = raw.codePointAt(i);
+    if(code > 0x2000){ splitIdx = i; break; }
+  }
+  return { word: raw.slice(0, splitIdx).trim(), emoji: raw.slice(splitIdx).trim() };
+}
+
 function loadStoryQuestion(){
   const lang = storyLang;
   const templates = STORY_TEMPLATES[lang];
@@ -980,42 +991,51 @@ function loadStoryQuestion(){
   const tpl = pool[Math.floor(Math.random()*pool.length)];
   const char = STORY_CHARS[Math.floor(Math.random()*STORY_CHARS.length)];
 
-  // Pick object from template's list
-  let objRaw = tpl.objs[Math.floor(Math.random()*tpl.objs.length)];
+  const objRaw = tpl.objs[Math.floor(Math.random()*tpl.objs.length)];
+  const {word: objWord, emoji: objEmoji} = splitObj(objRaw);
 
-  // Generate numbers
   let a, b, correct;
   if(isAdd){
-    a = Math.floor(Math.random()*14)+1; // 1-14
-    b = Math.floor(Math.random()*(20-a))+1; // sum max 20
+    a = Math.floor(Math.random()*14)+1;
+    b = Math.floor(Math.random()*(20-a))+1;
     correct = a + b;
   } else {
-    b = Math.floor(Math.random()*8)+1; // 1-8
-    a = b + Math.floor(Math.random()*10)+1; // a > b, result >= 1
+    b = Math.floor(Math.random()*8)+1;
+    a = b + Math.floor(Math.random()*10)+1;
     correct = a - b;
   }
 
-  // Build text
-  let text = tpl.t
+  // Display text: word + emoji e.g. "apples 🍎"
+  const displayText = tpl.t
     .replace(/{name}/g, char.name)
     .replace(/{a}/g, a)
     .replace(/{b}/g, b)
-    .replace(/{obj}/g, objRaw);
+    .replace(/{obj}/g, objWord + (objEmoji ? ' '+objEmoji : ''));
+
+  // TTS text: word only, no emoji
+  const ttsText = tpl.t
+    .replace(/{name}/g, char.name)
+    .replace(/{a}/g, a)
+    .replace(/{b}/g, b)
+    .replace(/{obj}/g, objWord);
 
   showScreen('storyScreen');
   document.getElementById('storyStreakEl').textContent = '🔥 ' + streak;
   document.getElementById('storyCharEmoji').textContent = char.emoji;
-  document.getElementById('storyText').textContent = text;
+  document.getElementById('storyText').textContent = displayText;
 
   const labels = {en:'Math Problems', tr:'Matematik Problemleri', nl:'Rekenproblemen'};
   document.getElementById('storyLangLabel').textContent = labels[lang];
 
   buildMathOptions('storyRow1','storyRow2', correct, (btn,sel,cor)=>onStorySelect(btn,sel,cor));
 
-  // Speak the question
   const ttsLang = {en:'en-US', tr:'tr-TR', nl:'nl-NL'}[lang];
-  const ttsVoice = {en:'en-US-Neural2-F', tr:'tr-TR-Standard-B', nl:'nl-NL-Neural2-D'}[lang];
-  setTimeout(()=>speakLang(text, ttsLang, ttsVoice), 350);
+  const ttsVoice = {
+    en: 'en-US-Neural2-F',
+    tr: 'tr-TR-Wavenet-C',
+    nl: 'nl-NL-Wavenet-E'
+  }[lang];
+  setTimeout(()=>speakLang(ttsText, ttsLang, ttsVoice), 350);
 }
 
 function onStorySelect(btn, selected, correct){
