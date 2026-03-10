@@ -1,2 +1,7 @@
 [functions]
   directory = "netlify/functions"
+
+[[redirects]]
+  from = "/"
+  to = "/number-quiz.html"
+  status = 200
