@@ -3,7 +3,7 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const { text } = JSON.parse(event.body);
+  const { text, langCode, voiceName } = JSON.parse(event.body);
   const apiKey = process.env.GOOGLE_TTS_KEY;
 
   const response = await fetch(
@@ -14,8 +14,8 @@ exports.handler = async function(event) {
       body: JSON.stringify({
         input: { text },
         voice: {
-          languageCode: 'en-US',
-          name: 'en-US-Neural2-F',
+          languageCode: langCode || 'en-US',
+          name: voiceName || 'en-US-Neural2-F',
         },
         audioConfig: {
           audioEncoding: 'MP3',
