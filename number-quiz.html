@@ -70,6 +70,11 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 .signature{font-family:'Caveat',cursive;font-size:clamp(19px,4.8vw,27px);color:rgba(15,45,90,.78);text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.5);margin-top:22px;letter-spacing:.5px;animation:sigFade 3s ease-in-out infinite alternate;}
 @keyframes sigFade{from{opacity:.7}to{opacity:1}}
 
+/* ── EMOJI GROUPS ── */
+.emoji-group-row{display:flex;align-items:center;justify-content:center;gap:12px;width:92%;max-width:440px;margin:6px 0;}
+.emoji-group-box{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-content:center;background:rgba(255,255,255,0.7);border:2px solid rgba(150,150,220,0.25);border-radius:16px;padding:10px;min-width:80px;max-width:160px;min-height:60px;}
+.emoji-group-op{font-size:clamp(24px,6vw,36px);font-weight:900;color:#4ECDC4;flex-shrink:0;}
+
 /* ── ADD CARD ── */
 .add-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
 .add-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0;flex-wrap:wrap;}
@@ -465,6 +470,12 @@ function startMode(m){
 
 // ─── COUNT DATA ─────────────────────────────────────────────
 const COUNT_EMOJIS=['🌸','🐶','⭐','🍎','🦋','🐱','🌙','🍕','🐸','🌈','🐠','🦄','🍓','🐣','🎈','🐧','🍦','🌻','🐢','🎵'];
+const COUNT_EMOJI_NAMES={
+  '🌸':'flowers','🐶':'dogs','⭐':'stars','🍎':'apples','🦋':'butterflies',
+  '🐱':'cats','🌙':'moons','🍕':'pizza slices','🐸':'frogs','🌈':'rainbows',
+  '🐠':'fish','🦄':'unicorns','🍓':'strawberries','🐣':'chicks','🎈':'balloons',
+  '🐧':'penguins','🍦':'ice creams','🌻':'sunflowers','🐢':'turtles','🎵':'music notes'
+};
 let countPool=[];
 let countPoolIdx=0;
 let currentCount=0;
@@ -497,6 +508,10 @@ function loadCountQuestion(){
     span.style.animationDelay=(i*0.06)+'s';
     grid.appendChild(span);
   }
+
+  // Speak the count question
+  const emojiName = COUNT_EMOJI_NAMES[emoji] || 'things';
+  setTimeout(()=>speak('How many ' + emojiName + ' are there?'), 400);
 
   // Build 5 answer options
   const correct=currentCount;
@@ -615,27 +630,19 @@ function loadSubQuestion(){
   document.getElementById('subStreakEl').textContent='🔥 '+streak;
   const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
 
-  // Group A — full set, plain
+  // Group A − Group B in boxes
   const gA=document.getElementById('subGroupA');
   gA.innerHTML='';
-  for(let i=0;i<subA;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.04)+'s';
-    gA.appendChild(s);
-  }
-
-  // Group B — plain
-  const gB=document.getElementById('subGroupB');
-  gB.innerHTML='';
-  for(let i=0;i<subB;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.04)+'s';
-    gB.appendChild(s);
-  }
+  gA.className='emoji-group-row';
+  gA.appendChild(makeEmojiBox(subA, emoji, 0));
+  const opElS=document.createElement('span');
+  opElS.className='emoji-group-op';
+  opElS.style.color='#FF6B6B';
+  opElS.textContent='−';
+  gA.appendChild(opElS);
+  gA.appendChild(makeEmojiBox(subB, emoji, subA));
+  document.getElementById('subGroupB').innerHTML='';
+  document.getElementById('subGroupB').style.display='none';
 
   // Formula
   document.getElementById('subFormula').textContent=subA+' − '+subB+' = ?';
@@ -661,40 +668,17 @@ function loadMulQuestion(){
   document.getElementById('mulStreakEl').textContent='🔥 '+streak;
   const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
 
-  // Show: [mulA emojis] X [mulB emojis]
+  // Show: [mulA emojis] X [mulB emojis] in group boxes
   const gEl=document.getElementById('mulGroups');
   gEl.innerHTML='';
-  gEl.style.cssText='display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;';
-
-  // Left group: mulA emojis
-  const leftGrp=document.createElement('div');
-  leftGrp.style.cssText='display:flex;flex-wrap:wrap;gap:3px;justify-content:center;background:rgba(162,155,254,0.12);border-radius:10px;padding:6px;max-width:120px;';
-  for(let i=0;i<mulA;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.05)+'s';
-    leftGrp.appendChild(s);
-  }
-  gEl.appendChild(leftGrp);
-
-  // X sign
+  gEl.className='emoji-group-row';
+  gEl.appendChild(makeEmojiBox(mulA, emoji, 0));
   const xSign=document.createElement('span');
-  xSign.style.cssText='font-size:clamp(24px,6vw,36px);font-weight:900;color:#a29bfe;margin:0 4px;';
+  xSign.className='emoji-group-op';
+  xSign.style.color='#a29bfe';
   xSign.textContent='×';
   gEl.appendChild(xSign);
-
-  // Right group: mulB emojis
-  const rightGrp=document.createElement('div');
-  rightGrp.style.cssText='display:flex;flex-wrap:wrap;gap:3px;justify-content:center;background:rgba(162,155,254,0.12);border-radius:10px;padding:6px;max-width:120px;';
-  for(let i=0;i<mulB;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.05)+'s';
-    rightGrp.appendChild(s);
-  }
-  gEl.appendChild(rightGrp);
+  gEl.appendChild(makeEmojiBox(mulB, emoji, mulA));
 
   document.getElementById('mulFormula').textContent=mulA+' × '+mulB+' = ?';
 
@@ -758,27 +742,19 @@ function loadDivQuestion(){
   document.getElementById('divStreakEl').textContent='🔥 '+streak;
   const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
 
-  // Show total emojis
+  // Show: [divA emojis] ÷ [divB emojis] in group boxes
   const tot=document.getElementById('divTotal');
   tot.innerHTML='';
-  for(let i=0;i<divA;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.04)+'s';
-    tot.appendChild(s);
-  }
-
-  // Show divisor: just divB emojis (the number we divide by)
-  const grpEl=document.getElementById('divGroups');
-  grpEl.innerHTML='';
-  for(let i=0;i<divB;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.05)+'s';
-    grpEl.appendChild(s);
-  }
+  tot.className='emoji-group-row';
+  tot.appendChild(makeEmojiBox(divA, emoji, 0));
+  const divOpEl=document.createElement('span');
+  divOpEl.className='emoji-group-op';
+  divOpEl.style.color='#fd79a8';
+  divOpEl.textContent='÷';
+  tot.appendChild(divOpEl);
+  tot.appendChild(makeEmojiBox(divB, emoji, divA));
+  document.getElementById('divGroups').innerHTML='';
+  document.getElementById('divGroups').style.display='none';
 
   document.getElementById('divFormula').textContent=divA+' ÷ '+divB+' = ?';
   buildMathOptions('divRow1','divRow2',correct,(btn,sel,cor)=>onDivSelect(btn,sel,cor));
@@ -1136,6 +1112,21 @@ function redrawGuide(){
 }
 
 
+
+// Build a grouped emoji box element
+function makeEmojiBox(count, emoji, delay0){
+  const box = document.createElement('div');
+  box.className = 'emoji-group-box';
+  for(let i=0;i<count;i++){
+    const s=document.createElement('span');
+    s.className='add-emoji';
+    s.textContent=emoji;
+    s.style.animationDelay=((delay0+i)*0.05)+'s';
+    box.appendChild(s);
+  }
+  return box;
+}
+
 // ─── ADD MODE ────────────────────────────────────────────────
 const ADD_EMOJIS=['🍎','🐶','⭐','🌸','🍕','🐱','🎈','🦋','🍦','🐸','🌈','🐠','🍓','🐣','🎵','🐧','🌻','🐢','🍇','🦄'];
 let addA=0, addB=0;
@@ -1152,27 +1143,18 @@ function loadAddQuestion(){
   // Pick one emoji type per question
   const emoji=ADD_EMOJIS[Math.floor(Math.random()*ADD_EMOJIS.length)];
 
-  // Group A
+  // Group A + B in boxes
   const gA=document.getElementById('addGroupA');
   gA.innerHTML='';
-  for(let i=0;i<addA;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.05)+'s';
-    gA.appendChild(s);
-  }
-
-  // Group B
-  const gB=document.getElementById('addGroupB');
-  gB.innerHTML='';
-  for(let i=0;i<addB;i++){
-    const s=document.createElement('span');
-    s.className='add-emoji';
-    s.textContent=emoji;
-    s.style.animationDelay=(i*0.05)+'s';
-    gB.appendChild(s);
-  }
+  gA.className='emoji-group-row';
+  gA.appendChild(makeEmojiBox(addA, emoji, 0));
+  const opEl=document.createElement('span');
+  opEl.className='emoji-group-op';
+  opEl.textContent='+';
+  gA.appendChild(opEl);
+  gA.appendChild(makeEmojiBox(addB, emoji, addA));
+  document.getElementById('addGroupB').innerHTML='';
+  document.getElementById('addGroupB').style.display='none';
 
   // Build 6 options — correct + 5 wrong nearby numbers
   const all=[];
