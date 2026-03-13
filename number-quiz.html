@@ -11,7 +11,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0%,#B8E4F9 60%,#dff0fb 100%);position:fixed;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+body{font-family:'Nunito',sans-serif;background:#EFEFEF;position:fixed;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 
 /* ── BG ── */
 .bg{position:fixed;inset:0;pointer-events:none;z-index:0;}
@@ -40,32 +40,37 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 .screen.hidden{opacity:0;pointer-events:none;transform:scale(.95);}
 
 /* ── HOME ── */
-#homeScreen{gap:0;}
-.app-title{font-size:clamp(38px,10vw,68px);font-weight:900;color:white;text-shadow:0 4px 0 rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.1);letter-spacing:-1px;line-height:1;text-align:center;animation:titleBounce 2.2s ease-in-out infinite;margin-bottom:8px;}
+#homeScreen{gap:0;justify-content:flex-start;overflow-y:auto;padding-top:20px;padding-bottom:20px;}
+.app-title{font-family:'Nunito',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;color:#444444;text-align:center;margin-bottom:18px;letter-spacing:1px;}
 @keyframes titleBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 .title-emoji{font-size:clamp(34px,8vw,58px);display:block;margin-bottom:6px;animation:spin 5s linear infinite;}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .mode-btns{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;justify-content:center;}
-.mode-btn{padding:18px 32px;font-family:'Nunito',sans-serif;font-size:clamp(17px,4.5vw,24px);font-weight:900;color:white;border:none;border-radius:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 6px 0 rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.12);transition:transform .1s,box-shadow .1s;min-width:130px;}
+.mode-btn{padding:18px 32px;font-family:'Nunito',sans-serif;font-size:clamp(17px,4.5vw,24px);font-weight:900;color:white;border:none;border-radius:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:transform .1s,box-shadow .1s;min-width:130px;}
 .mode-btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.2);}
-.mode-btn.numbers{background:linear-gradient(135deg,#FF6B6B,#FF8E53);}
-.mode-btn.letters{background:linear-gradient(135deg,#4ECDC4,#74b9ff);}
-.mode-btn.count{background:linear-gradient(135deg,#FFB347,#ff6b9d);}
-.mode-btn.add{background:linear-gradient(135deg,#51CF66,#00b894);}
-.mode-btn.sub{background:linear-gradient(135deg,#FF6B6B,#ee5a24);}
-.mode-btn.mul{background:linear-gradient(135deg,#a29bfe,#6c5ce7);}
-.mode-btn.div{background:linear-gradient(135deg,#fd79a8,#e84393);}
-.mode-btn.story{background:linear-gradient(135deg,#f9ca24,#f0932b);}
-.lang-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.mode-btn.numbers{background:#8FA89A;box-shadow:0 5px 0 #6a8278,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.letters{background:#8A9BB0;box-shadow:0 5px 0 #637589,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.count{background:#B09880;box-shadow:0 5px 0 #8a7260,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.add{background:#9E96B5;box-shadow:0 5px 0 #786f93,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.sub{background:#7A9E8A;box-shadow:0 5px 0 #5a7a68,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.mul{background:#A89898;box-shadow:0 5px 0 #806e6e,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.div{background:#8FA89A;box-shadow:0 5px 0 #6a8278,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.colour{background:#B09880;box-shadow:0 5px 0 #8a7260,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.write{background:#9E96B5;box-shadow:0 5px 0 #786f93,0 8px 20px rgba(0,0,0,0.08);}
+.mode-btn.story{background:#8A9BB0;box-shadow:0 5px 0 #637589,0 8px 20px rgba(0,0,0,0.08);}
+.lang-picker{display:flex;gap:10px;justify-content:center;margin-bottom:14px;}
+.lang-flag{font-size:28px;cursor:pointer;opacity:0.4;transition:opacity .2s,transform .2s;border:none;background:none;padding:4px;}
+.lang-flag.active{opacity:1;transform:scale(1.2);}
+
 .lang-overlay.hidden{display:none;}
-.lang-box{background:white;border-radius:26px;padding:28px 20px;max-width:340px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);text-align:center;}
-.lang-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#2c3e50;margin-bottom:18px;}
-.lang-btn{display:block;width:100%;padding:14px;margin-bottom:12px;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:transform .1s;}
+
+
+
 .lang-btn:active{transform:scale(.97);}
-.lang-btn.en{background:linear-gradient(135deg,#74b9ff,#0984e3);color:white;box-shadow:0 4px 0 #0660ae;}
-.lang-btn.tr{background:linear-gradient(135deg,#ff7675,#d63031);color:white;box-shadow:0 4px 0 #a01e1e;}
-.lang-btn.nl{background:linear-gradient(135deg,#fd79a8,#e84393);color:white;box-shadow:0 4px 0 #a01e68;}
-.lang-close{margin-top:4px;padding:8px 24px;background:#eee;border:none;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;color:#888;}
+
+
+
+
 .mode-btn .bi{font-size:clamp(26px,7vw,40px);}
 .signature{font-family:'Caveat',cursive;font-size:clamp(19px,4.8vw,27px);color:rgba(15,45,90,.78);text-shadow:0 2px 10px rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.5);margin-top:22px;letter-spacing:.5px;animation:sigFade 3s ease-in-out infinite alternate;}
 @keyframes sigFade{from{opacity:.7}to{opacity:1}}
@@ -73,20 +78,20 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 /* ── EMOJI GROUPS ── */
 .emoji-group-row{display:flex;align-items:center;justify-content:center;gap:12px;width:92%;max-width:440px;margin:6px 0;}
 .emoji-group-box{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-content:center;background:rgba(255,255,255,0.7);border:2px solid rgba(150,150,220,0.25);border-radius:16px;padding:10px;min-width:80px;max-width:160px;min-height:60px;}
-.emoji-group-op{font-size:clamp(24px,6vw,36px);font-weight:900;color:#4ECDC4;flex-shrink:0;}
+.emoji-group-op{font-size:clamp(24px,6vw,36px);font-weight:900;color:#8A9BB0;flex-shrink:0;}
 
 /* ── ADD CARD ── */
-.add-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.add-card{background:#FFFFFF;border-radius:26px;box-shadow:0 2px 12px rgba(0,0,0,0.07);padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
 .add-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0;flex-wrap:wrap;}
 .add-group{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:200px;}
 .add-emoji{font-size:clamp(22px,6vw,32px);line-height:1;animation:popIn .3s ease-out both;}
-.add-op{font-size:clamp(28px,7vw,40px);font-weight:900;color:#51CF66;margin:0 4px;}
-.add-q{font-size:clamp(32px,8vw,48px);font-weight:900;color:#FF6B6B;}
+.add-op{font-size:clamp(28px,7vw,40px);font-weight:900;color:#8FA89A;margin:0 4px;}
+.add-q{font-size:clamp(32px,8vw,48px);font-weight:900;color:#555555;}
 .add-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:92%;max-width:440px;}
 .add-opts2{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:92%;max-width:440px;}
 
 /* ── COUNT CARD ── */
-.count-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);margin-bottom:4px;}
+.count-card{background:#FFFFFF;border-radius:26px;box-shadow:0 2px 12px rgba(0,0,0,0.07);padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);margin-bottom:4px;}
 .count-label{font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
 .emoji-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:4px;}
 .emoji-item{font-size:clamp(28px,8vw,44px);line-height:1;animation:popIn .3s ease-out both;}
@@ -95,9 +100,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 /* ── QUIZ ── */
 #quizScreen{gap:12px;justify-content:flex-start;padding-top:50px;}
 .q-header{display:flex;align-items:center;gap:10px;width:92%;max-width:440px;}
-.back-btn{width:40px;height:40px;border:none;border-radius:50%;background:rgba(255,255,255,.75);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);}
-.streak{margin-left:auto;background:rgba(255,255,255,.75);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:900;color:#e67e22;}
-.question-card{background:rgba(255,255,255,.93);border-radius:26px;padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.back-btn{background:#E0E0E0;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;color:#555;}
+.streak{font-size:clamp(15px,3.5vw,20px);font-weight:800;color:#888888;}
+.question-card{background:#FFFFFF;border-radius:26px;box-shadow:0 2px 12px rgba(0,0,0,0.07);padding:16px 20px;width:92%;max-width:440px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
 .q-label{font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
 .q-word{font-size:clamp(20px,5.5vw,30px);font-weight:900;color:#2c3e50;line-height:1.2;}
 .letter-cue{display:flex;flex-direction:column;align-items:center;gap:3px;}
@@ -109,20 +114,23 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 .options-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:92%;max-width:440px;}
 .opt-btn{height:clamp(80px,18vw,110px);border:none;border-radius:18px;font-family:'Nunito',sans-serif;font-size:clamp(24px,7vw,48px);font-weight:900;cursor:pointer;transition:transform .12s,box-shadow .12s;display:flex;align-items:center;justify-content:center;width:100%;}
 .opt-btn:active{transform:scale(.91) translateY(3px);}
-.opt-btn.c0{background:linear-gradient(135deg,#FF6B6B,#ee5a24);color:white;box-shadow:0 5px 0 #b83214;}
-.opt-btn.c1{background:linear-gradient(135deg,#4ECDC4,#00b894);color:white;box-shadow:0 5px 0 #007a60;}
-.opt-btn.c2{background:linear-gradient(135deg,#FFE66D,#f9ca24);color:#5f4000;box-shadow:0 5px 0 #c18e00;}
-.opt-btn.c3{background:linear-gradient(135deg,#74b9ff,#0984e3);color:white;box-shadow:0 5px 0 #0660ae;}
-.opt-btn.c4{background:linear-gradient(135deg,#fd79a8,#e84393);color:white;box-shadow:0 5px 0 #a01e68;}
-.opt-btn.c5{background:linear-gradient(135deg,#a29bfe,#6c5ce7);color:white;box-shadow:0 5px 0 #4530b5;}
-.opt-btn.correct{animation:correctPop .5s ease;background:linear-gradient(135deg,#51CF66,#2ecc71)!important;box-shadow:0 5px 0 #1e9e4e!important;color:white!important;}
-.opt-btn.wrong{animation:wrongShake .4s ease;background:linear-gradient(135deg,#FF6B6B,#e74c3c)!important;box-shadow:0 5px 0 #b03030!important;color:white!important;}
+.opt-btn.c0{background:#8FA89A;color:white;box-shadow:0 4px 0 #6a8278;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.c1{background:#8A9BB0;color:white;box-shadow:0 4px 0 #637589;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.c2{background:#B09880;color:white;box-shadow:0 4px 0 #8a7260;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.c3{background:#9E96B5;color:white;box-shadow:0 4px 0 #786f93;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.c4{background:#7A9E8A;color:white;box-shadow:0 4px 0 #5a7a68;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.c5{background:#A89898;color:white;box-shadow:0 4px 0 #806e6e;border:1px solid rgba(0,0,0,0.06);}
+.opt-btn.correct{animation:correctPop .5s ease;background:#7AB87A!important;box-shadow:0 4px 0 #5a9060!important;color:white!important;}
+.opt-btn.wrong{animation:wrongShake .4s ease;background:#C47A7A!important;box-shadow:0 4px 0 #9a5050!important;color:white!important;}
 @keyframes correctPop{0%{transform:scale(1)}30%{transform:scale(1.15)}100%{transform:scale(1)}}
-@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes wrongShake{
+}
+#writeInput.wrong{animation:wrongShake .4s ease;}
+@keyframes wrongShakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
 /* ── DRAW ── */
 #drawScreen{gap:8px;justify-content:flex-start;padding-top:44px;}
-.draw-card{background:rgba(255,255,255,.93);border-radius:26px;padding:12px 14px;width:92%;max-width:400px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.draw-card{background:#FFFFFF;border-radius:26px;box-shadow:0 2px 12px rgba(0,0,0,0.07);padding:12px 14px;width:92%;max-width:400px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.12);}
 .draw-title{font-size:clamp(15px,4vw,21px);font-weight:900;color:#2c3e50;margin-bottom:1px;}
 .draw-hint{font-size:clamp(10px,2.6vw,13px);color:#bbb;font-weight:700;margin-bottom:8px;}
 .canvas-wrap{position:relative;margin:0 auto;border-radius:18px;overflow:hidden;background:#f5f6ff;touch-action:none;border:3px solid rgba(150,150,200,.18);}
@@ -133,7 +141,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 
 
 
-.ok-btn{margin-top:10px;padding:13px 44px;background:linear-gradient(135deg,#51CF66,#2ecc71);color:white;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:clamp(15px,4vw,21px);font-weight:900;cursor:pointer;box-shadow:0 5px 0 #1e9e4e,0 8px 18px rgba(81,207,102,.4);letter-spacing:1px;}
+.ok-btn{margin-top:10px;padding:13px 44px;background:#7AB87A;color:white;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:clamp(15px,4vw,21px);font-weight:900;cursor:pointer;box-shadow:0 5px 0 #1e9e4e,0 8px 18px rgba(81,207,102,.4);letter-spacing:1px;}
 .ok-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1e9e4e;}
 .clear-btn{margin-top:7px;padding:9px 26px;background:linear-gradient(135deg,#fd79a8,#e84393);color:white;border:none;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 3px 0 #a01e68;}
 .clear-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #a01e68;}
@@ -155,30 +163,41 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
 <!-- HOME -->
 <div class="screen" id="homeScreen">
   <div class="app-title"><span class="title-emoji">🌟</span>Learn &amp; Play!</div>
+  <div class="lang-picker">
+    <button class="lang-flag active" id="flag-en" onclick="setLang('en')">🇬🇧</button>
+    <button class="lang-flag" id="flag-tr" onclick="setLang('tr')">🇹🇷</button>
+    <button class="lang-flag" id="flag-nl" onclick="setLang('nl')">🇳🇱</button>
+  </div>
   <div class="mode-btns">
-    <button class="mode-btn numbers" onclick="startMode('numbers')">
-      <span class="bi">🔢</span>Numbers
+    <button class="mode-btn numbers" id="btn-numbers" onclick="startMode('numbers')">
+      <span class="bi">🔢</span><span id="lbl-numbers">Numbers</span>
     </button>
-    <button class="mode-btn letters" onclick="startMode('letters')">
-      <span class="bi">🔤</span>Letters
+    <button class="mode-btn letters" id="btn-letters" onclick="startMode('letters')">
+      <span class="bi">🔤</span><span id="lbl-letters">Letters</span>
     </button>
-    <button class="mode-btn count" onclick="startMode('count')">
-      <span class="bi">🌸</span>Count!
+    <button class="mode-btn count" id="btn-count" onclick="startMode('count')">
+      <span class="bi">🌸</span><span id="lbl-count">Count!</span>
     </button>
-    <button class="mode-btn add" onclick="startMode('add')">
-      <span class="bi">➕</span>Add!
+    <button class="mode-btn add" id="btn-add" onclick="startMode('add')">
+      <span class="bi">➕</span><span id="lbl-add">Add!</span>
     </button>
-    <button class="mode-btn sub" onclick="startMode('sub')">
-      <span class="bi">➖</span>Subtract!
+    <button class="mode-btn sub" id="btn-sub" onclick="startMode('sub')">
+      <span class="bi">➖</span><span id="lbl-sub">Subtract!</span>
     </button>
-    <button class="mode-btn mul" onclick="startMode('mul')">
-      <span class="bi">✖️</span>Multiply!
+    <button class="mode-btn mul" id="btn-mul" onclick="startMode('mul')">
+      <span class="bi">✖️</span><span id="lbl-mul">Multiply!</span>
     </button>
-    <button class="mode-btn div" onclick="startMode('div')">
-      <span class="bi">➗</span>Divide!
+    <button class="mode-btn div" id="btn-div" onclick="startMode('div')">
+      <span class="bi">➗</span><span id="lbl-div">Divide!</span>
     </button>
-    <button class="mode-btn story" onclick="showLangPicker()">
-      <span class="bi">📖</span>Math Problems
+    <button class="mode-btn story" id="btn-story" onclick="startMode('story')">
+      <span class="bi">📖</span><span id="lbl-story">Math Problems</span>
+    </button>
+    <button class="mode-btn write" id="btn-write" onclick="startMode('write')">
+      <span class="bi">✍️</span><span id="lbl-write">Listen & Write</span>
+    </button>
+    <button class="mode-btn colour" id="btn-colour" onclick="startMode('colour')">
+      <span class="bi">🎨</span><span id="lbl-colour">Colours & Shapes</span>
     </button>
   </div>
   <div class="signature">Made with love</div>
@@ -206,7 +225,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <div class="streak" id="countStreakEl">🔥 0</div>
   </div>
   <div class="count-card">
-    <div class="count-label">How many? 🤔</div>
+    <div class="count-label" id="countLabel">How many? 🤔</div>
     <div class="emoji-grid" id="emojiGrid"></div>
   </div>
   <div class="options-grid" id="countRow1"></div>
@@ -220,9 +239,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <div class="streak" id="addStreakEl">🔥 0</div>
   </div>
   <div class="add-card">
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;" id="addLabel">What is the sum?</div>
     <div class="add-row" id="addGroupA"></div>
-    <div class="add-row"><span class="add-op">+</span></div>
-    <div class="add-row" id="addGroupB"></div>
+    <div class="add-row" id="addGroupB" style="display:none"></div>
     <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="addFormula"></div>
   </div>
   <div class="add-opts" id="addRow1"></div>
@@ -236,9 +255,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <div class="streak" id="subStreakEl">🔥 0</div>
   </div>
   <div class="add-card">
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;" id="subLabel">What is left?</div>
     <div class="add-row" id="subGroupA"></div>
-    <div class="add-row"><span class="add-op" style="color:#FF6B6B">−</span></div>
-    <div class="add-row" id="subGroupB"></div>
+    <div class="add-row" id="subGroupB" style="display:none"></div>
     <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="subFormula"></div>
   </div>
   <div class="add-opts" id="subRow1"></div>
@@ -252,9 +271,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <div class="streak" id="mulStreakEl">🔥 0</div>
   </div>
   <div class="add-card">
-    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">How many in total?</div>
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;" id="mulLabel">How many in total?</div>
     <div class="add-row" id="mulGroups"></div>
-    <div class="add-row"><span class="add-op" style="color:#a29bfe">×</span></div>
+
     <div class="add-row" id="mulFormula" style="font-size:clamp(20px,5vw,28px);font-weight:900;color:#2c3e50;"></div>
     <div class="add-row"><span class="add-op">= </span><span class="add-q">?</span></div>
   </div>
@@ -269,9 +288,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#7EC8E3 0
     <div class="streak" id="divStreakEl">🔥 0</div>
   </div>
   <div class="add-card">
-    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Split into equal groups!</div>
+    <div style="font-size:clamp(11px,2.8vw,14px);color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;" id="divLabel">Split into equal groups!</div>
     <div class="add-row" id="divTotal"></div>
-    <div class="add-row"><span class="add-op" style="color:#fd79a8">÷</span></div>
+
     <div class="add-row" id="divGroups"></div>
     <div class="add-row" style="margin-top:6px;font-size:clamp(18px,5vw,26px);font-weight:900;color:#2c3e50;" id="divFormula"></div>
   </div>
@@ -314,20 +333,108 @@ const NUMBERS=[1,2,3,4,5,6,7,8,9,10];
 const NUM_NAMES=['','one','two','three','four','five','six','seven','eight','nine','ten'];
 const NUM_WORDS=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
 
-const LETTERS=[
-  {l:'A',word:'Apple',    emoji:'🍎'},{l:'B',word:'Boat',     emoji:'⛵'},
-  {l:'C',word:'Cat',      emoji:'🐱'},{l:'D',word:'Dog',      emoji:'🐶'},
-  {l:'E',word:'Elephant', emoji:'🐘'},{l:'F',word:'Fish',     emoji:'🐟'},
-  {l:'G',word:'Grapes',   emoji:'🍇'},{l:'H',word:'Hat',      emoji:'🎩'},
-  {l:'I',word:'Ice Cream',emoji:'🍦'},{l:'J',word:'Jellyfish',emoji:'🪼'},
-  {l:'K',word:'Kite',     emoji:'🪁'},{l:'L',word:'Lion',     emoji:'🦁'},
-  {l:'M',word:'Monkey',   emoji:'🐒'},{l:'N',word:'Nose',     emoji:'👃'},
-  {l:'O',word:'Orange',   emoji:'🍊'},{l:'P',word:'Pizza',    emoji:'🍕'},
-  {l:'Q',word:'Queen',    emoji:'👸'},{l:'R',word:'Rainbow',  emoji:'🌈'},
-  {l:'S',word:'Star',     emoji:'⭐'},{l:'T',word:'Train',    emoji:'🚂'},
-  {l:'U',word:'Umbrella', emoji:'☂️'},{l:'V',word:'Violin',   emoji:'🎻'},
-  {l:'W',word:'Whale',    emoji:'🐋'},{l:'Y',word:'Yummy',    emoji:'😋'},{l:'Z',word:'Zebra',    emoji:'🦓'},
-];
+const LANG_DATA = {
+  en: {
+    letters: [
+      {l:'A',word:'Apple',emoji:'🍎'},{l:'B',word:'Boat',emoji:'⛵'},
+      {l:'C',word:'Cat',emoji:'🐱'},{l:'D',word:'Dog',emoji:'🐶'},
+      {l:'E',word:'Elephant',emoji:'🐘'},{l:'F',word:'Fish',emoji:'🐟'},
+      {l:'G',word:'Grapes',emoji:'🍇'},{l:'H',word:'Hat',emoji:'🎩'},
+      {l:'I',word:'Ice Cream',emoji:'🍦'},{l:'J',word:'Jellyfish',emoji:'🪼'},
+      {l:'K',word:'Kite',emoji:'🪁'},{l:'L',word:'Lion',emoji:'🦁'},
+      {l:'M',word:'Monkey',emoji:'🐒'},{l:'N',word:'Nose',emoji:'👃'},
+      {l:'O',word:'Orange',emoji:'🍊'},{l:'P',word:'Pizza',emoji:'🍕'},
+      {l:'Q',word:'Queen',emoji:'👸'},{l:'R',word:'Rainbow',emoji:'🌈'},
+      {l:'S',word:'Star',emoji:'⭐'},{l:'T',word:'Train',emoji:'🚂'},
+      {l:'U',word:'Umbrella',emoji:'☂️'},{l:'V',word:'Violin',emoji:'🎻'},
+      {l:'W',word:'Whale',emoji:'🐋'},{l:'Y',word:'Yummy',emoji:'😋'},
+      {l:'Z',word:'Zebra',emoji:'🦓'},
+    ],
+    numNames: ['','one','two','three','four','five','six','seven','eight','nine','ten'],
+    numWords: ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'],
+    ui: {
+      whichNumber: 'Which number is...',
+      whichLetter: 'What is the first letter?',
+      howMany: 'How many {emoji} are there?',
+      nowDraw: '✏️ Now draw it!',
+      trace: 'Trace with your finger',
+      countLabel: 'How many? 🤔', addLabel: '➕ Addition', subLabel: '➖ Subtraction', mulLabel: '✖️ Multiplication', divLabel: '➗ Division',
+      mulLabel: 'How many in total?', divLabel: 'Split into equal groups!', addLabel: 'What is the sum?', subLabel: 'What is left?',
+      btnNumbers: 'Numbers', btnLetters: 'Letters', btnCount: 'Count!',
+      btnAdd: 'Add!', btnSub: 'Subtract!', btnMul: 'Multiply!',
+      btnDiv: 'Divide!', btnStory: 'Math Problems', btnWrite: 'Listen & Write', btnColour: 'Colours & Shapes'
+    },
+    ttsLang: 'en-US',
+    ttsVoice: 'en-US-Neural2-F',
+  },
+  tr: {
+    letters: [
+      {l:'A',word:'Araba',emoji:'🚗'},{l:'B',word:'Balon',emoji:'🎈'},
+      {l:'Ç',word:'Çiçek',emoji:'🌸'},{l:'D',word:'Domuz',emoji:'🐷'},
+      {l:'E',word:'Elma',emoji:'🍎'},{l:'F',word:'Fare',emoji:'🐭'},
+      {l:'G',word:'Göz',emoji:'👁️'},{l:'K',word:'Kedi',emoji:'🐱'},
+      {l:'L',word:'Limon',emoji:'🍋'},{l:'M',word:'Muz',emoji:'🍌'},
+      {l:'O',word:'Otobüs',emoji:'🚌'},{l:'Ö',word:'Ördek',emoji:'🦆'},
+      {l:'P',word:'Pizza',emoji:'🍕'},{l:'R',word:'Robot',emoji:'🤖'},
+      {l:'S',word:'Su',emoji:'💧'},{l:'Ş',word:'Şemsiye',emoji:'☂️'},
+      {l:'T',word:'Top',emoji:'⚽'},{l:'U',word:'Uçak',emoji:'✈️'},
+      {l:'Ü',word:'Üzüm',emoji:'🍇'},{l:'Y',word:'Yıldız',emoji:'⭐'},
+      {l:'Z',word:'Zebra',emoji:'🦓'},
+    ],
+    numNames: ['','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz','on'],
+    numWords: ['','Bir','İki','Üç','Dört','Beş','Altı','Yedi','Sekiz','Dokuz','On'],
+    ui: {
+      whichNumber: 'Hangi sayı...',
+      whichLetter: 'İlk harf nedir?',
+      howMany: 'Kaç tane {emoji} var?',
+      nowDraw: '✏️ Şimdi çiz!',
+      trace: 'Parmağınla çiz',
+      countLabel: 'Kaç tane? 🤔', addLabel: '➕ Toplama', subLabel: '➖ Çıkarma', mulLabel: '✖️ Çarpma', divLabel: '➗ Bölme',
+      mulLabel: 'Toplamda kaç tane?', divLabel: 'Eşit gruplara böl!', addLabel: 'Toplam kaç?', subLabel: 'Kaç tane kaldı?',
+      btnNumbers: 'Sayılar', btnLetters: 'Harfler', btnCount: 'Say!',
+      btnAdd: 'Topla!', btnSub: 'Çıkar!', btnMul: 'Çarp!',
+      btnDiv: 'Böl!', btnStory: 'Matematik Problemleri', btnWrite: 'Dinle & Yaz', btnColour: 'Renkler & Şekiller'
+    },
+    ttsLang: 'tr-TR',
+    ttsVoice: 'tr-TR-Wavenet-C',
+  },
+  nl: {
+    letters: [
+      {l:'A',word:'Appel',emoji:'🍎'},{l:'B',word:'Boot',emoji:'⛵'},
+      {l:'D',word:'Deur',emoji:'🚪'},{l:'E',word:'Ei',emoji:'🥚'},
+      {l:'F',word:'Fiets',emoji:'🚲'},{l:'G',word:'Giraffe',emoji:'🦒'},
+      {l:'H',word:'Hond',emoji:'🐶'},{l:'K',word:'Kat',emoji:'🐱'},
+      {l:'L',word:'Leeuw',emoji:'🦁'},{l:'M',word:'Maan',emoji:'🌙'},
+      {l:'N',word:'Neus',emoji:'👃'},{l:'O',word:'Olifant',emoji:'🐘'},
+      {l:'P',word:'Pizza',emoji:'🍕'},{l:'R',word:'Regenboog',emoji:'🌈'},
+      {l:'S',word:'Ster',emoji:'⭐'},{l:'T',word:'Trein',emoji:'🚂'},
+      {l:'U',word:'Uil',emoji:'🦉'},{l:'V',word:'Vlinder',emoji:'🦋'},
+      {l:'W',word:'Wolk',emoji:'☁️'},{l:'Z',word:'Zebra',emoji:'🦓'},
+    ],
+    numNames: ['','een','twee','drie','vier','vijf','zes','zeven','acht','negen','tien'],
+    numWords: ['','Een','Twee','Drie','Vier','Vijf','Zes','Zeven','Acht','Negen','Tien'],
+    ui: {
+      whichNumber: 'Welk getal is...',
+      whichLetter: 'Wat is de eerste letter?',
+      howMany: 'Hoeveel {emoji} zijn er?',
+      nowDraw: '✏️ Teken het nu!',
+      trace: 'Teken met je vinger',
+      countLabel: 'Hoeveel? 🤔', addLabel: '➕ Optellen', subLabel: '➖ Aftrekken', mulLabel: '✖️ Vermenigvuldigen', divLabel: '➗ Delen',
+      mulLabel: 'Hoeveel in totaal?', divLabel: 'Verdeel in gelijke groepen!', addLabel: 'Wat is de som?', subLabel: 'Wat blijft er over?',
+      btnNumbers: 'Getallen', btnLetters: 'Letters', btnCount: 'Tel!',
+      btnAdd: 'Optellen!', btnSub: 'Aftrekken!', btnMul: 'Vermenigvuldigen!',
+      btnDiv: 'Delen!', btnStory: 'Rekenproblemen', btnWrite: 'Luister & Schrijf', btnColour: 'Kleuren & Vormen'
+    },
+    ttsLang: 'nl-NL',
+    ttsVoice: 'nl-NL-Wavenet-E',
+  },
+};
+
+// Active language
+let appLang = 'en';
+function L(){ return LANG_DATA[appLang]; }
+
+const LETTERS = LANG_DATA.en.letters; // kept for compatibility, updated at runtime
 
 
 
@@ -391,11 +498,46 @@ function playTryAgain(){
 }
 
 // ─── SPEECH ─────────────────────────────────────────────────
+function setLang(lang){
+  appLang = lang;
+  // Update flag UI
+  ['en','tr','nl'].forEach(l=>{
+    const f = document.getElementById('flag-'+l);
+    if(f) f.classList.toggle('active', l===lang);
+  });
+  // Update button labels
+  const ui = LANG_DATA[lang].ui;
+  const lblMap = {
+    'numbers': ui.btnNumbers, 'letters': ui.btnLetters, 'count': ui.btnCount,
+    'add': ui.btnAdd, 'sub': ui.btnSub, 'mul': ui.btnMul,
+    'div': ui.btnDiv, 'story': ui.btnStory, 'write': ui.btnWrite, 'colour': ui.btnColour
+  };
+  Object.entries(lblMap).forEach(([key,val])=>{
+    const el = document.getElementById('lbl-'+key);
+    if(el) el.textContent = val;
+  });
+  // Update screen labels
+  const setEl = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  setEl('countLabel', ui.countLabel);
+  setEl('mulLabel', ui.mulLabel);
+  setEl('divLabel', ui.divLabel);
+  setEl('addLabel', ui.addLabel);
+  setEl('subLabel', ui.subLabel);
+  setEl('qLabel', mode==='numbers' ? ui.whichNumber : ui.whichLetter);
+  setEl('drawTitle', ui.nowDraw);
+  setEl('drawHint', ui.trace);
+}
+
 function speak(text){
+  const ld = L();
+  speakLang(text, ld.ttsLang, ld.ttsVoice);
+}
+
+function speakLang(text, langCode, voiceName){
   fetch('/.netlify/functions/tts', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({text})
+    body: JSON.stringify({text, langCode, voiceName})
   })
   .then(r => r.json())
   .then(data => {
@@ -404,11 +546,10 @@ function speak(text){
     audio.play();
   })
   .catch(() => {
-    // Fallback to browser TTS if API fails
     if(!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang='en-US'; u.rate=0.82; u.pitch=1.4;
+    u.lang = L().ttsLang; u.rate=0.82; u.pitch=1.4;
     window.speechSynthesis.speak(u);
   });
 }
@@ -449,7 +590,16 @@ function startMode(m){
 
   mode=m;streak=0;
   initFloaters();
-  if(mode==='add'){
+  if(mode==='colour'){
+    loadColourQuestion();
+  } else if(mode==='write'){
+    writePool=shuffle([...WRITE_WORDS[appLang]]);
+    writePoolIdx=0;
+    loadWriteQuestion();
+  } else if(mode==='story'){
+    storyLang=appLang;
+    loadStoryQuestion();
+  } else if(mode==='add'){
     loadAddQuestion();
   } else if(mode==='sub'){
     loadSubQuestion();
@@ -462,7 +612,7 @@ function startMode(m){
     countPoolIdx=0;
     loadCountQuestion();
   } else {
-    pool=mode==='numbers'?shuffle([...NUMBERS]):shuffle([...LETTERS]);
+    pool=mode==='numbers'?shuffle([...NUMBERS]):shuffle([...L().letters]);
     poolIdx=0;
     loadQuestion();
   }
@@ -470,6 +620,19 @@ function startMode(m){
 
 // ─── COUNT DATA ─────────────────────────────────────────────
 const COUNT_EMOJIS=['🌸','🐶','⭐','🍎','🦋','🐱','🌙','🍕','🐸','🌈','🐠','🦄','🍓','🐣','🎈','🐧','🍦','🌻','🐢','🎵'];
+
+const COUNT_EMOJI_NAMES_TR = {
+  '🌸':'çiçek','🐶':'köpek','⭐':'yıldız','🍎':'elma','🦋':'kelebek',
+  '🐱':'kedi','🌙':'ay','🍕':'pizza','🐸':'kurbağa','🌈':'gökkuşağı',
+  '🐠':'balık','🦄':'unicorn','🍓':'çilek','🐣':'civciv','🎈':'balon',
+  '🐧':'penguen','🍦':'dondurma','🌻':'ayçiçeği','🐢':'kaplumbağa','🎵':'nota'
+};
+const COUNT_EMOJI_NAMES_NL = {
+  '🌸':'bloemen','🐶':'honden','⭐':'sterren','🍎':'appels','🦋':'vlinders',
+  '🐱':'katten','🌙':'manen','🍕':'pizzas','🐸':'kikkers','🌈':'regenbogen',
+  '🐠':'vissen','🦄':'eenhoorns','🍓':'aardbeien','🐣':'kuikentjes','🎈':'ballonnen',
+  '🐧':'pinguins','🍦':'ijsjes','🌻':'zonnebloemen','🐢':'schildpadden','🎵':'noten'
+};
 const COUNT_EMOJI_NAMES={
   '🌸':'flowers','🐶':'dogs','⭐':'stars','🍎':'apples','🦋':'butterflies',
   '🐱':'cats','🌙':'moons','🍕':'pizza slices','🐸':'frogs','🌈':'rainbows',
@@ -493,6 +656,7 @@ function getNextCount(){
 function loadCountQuestion(){
   currentCount=getNextCount();
   showScreen('countScreen');
+  document.getElementById('countLabel').textContent=L().ui.countLabel;
   document.getElementById('countStreakEl').textContent='🔥 '+streak;
 
   // Pick a random emoji set
@@ -510,8 +674,10 @@ function loadCountQuestion(){
   }
 
   // Speak the count question
-  const emojiName = COUNT_EMOJI_NAMES[emoji] || 'things';
-  setTimeout(()=>speak('How many ' + emojiName + ' are there?'), 400);
+  const emojiNameMap = appLang==='tr'?COUNT_EMOJI_NAMES_TR:appLang==='nl'?COUNT_EMOJI_NAMES_NL:COUNT_EMOJI_NAMES;
+  const emojiName = emojiNameMap[emoji] || (appLang==='tr'?'nesne':appLang==='nl'?'dingen':'things');
+  const howManyStr = L().ui.howMany.replace('{emoji}', emojiName);
+  setTimeout(()=>speak(howManyStr), 400);
 
   // Build 5 answer options
   const correct=currentCount;
@@ -538,7 +704,7 @@ function onCountSelect(btn,selected,correct){
     document.querySelectorAll('#countRow1 .opt-btn,#countRow2 .opt-btn').forEach(b=>b.onclick=null);
     btn.classList.add('correct');playDing();createSparkles(btn);streak++;
     document.getElementById('countStreakEl').textContent='🔥 '+streak;
-    speak(NUM_NAMES[correct]);
+    speak(L().numNames[correct]);
     setTimeout(()=>showCountDraw(correct),680);
   } else {
     btn.classList.add('wrong');playWrong();
@@ -549,7 +715,7 @@ function onCountSelect(btn,selected,correct){
 
 function showCountDraw(num){
   showScreen('drawScreen');
-  document.getElementById('drawTitle').textContent='✏️ Now draw it!';
+  document.getElementById('drawTitle').textContent=L().ui.nowDraw;
   document.getElementById('drawHint').textContent='Draw the number '+num+' with your finger';
   initCanvas(num);
 }
@@ -562,17 +728,17 @@ function loadQuestion(){
 
   if(mode==='numbers'){
     const n=currentItem;
-    document.getElementById('qLabel').textContent='Which number is...';
-    document.getElementById('qContent').innerHTML=`<div class="q-word">Number <strong>${NUM_WORDS[n]}</strong></div>`;
+    document.getElementById('qLabel').textContent=L().ui.whichNumber;
+    document.getElementById('qContent').innerHTML=`<div class="q-word">${L().numWords[n]}</div>`;
     const opts=buildOptList(NUMBERS,n,x=>x,x=>x);
     renderOptions(opts,n,x=>x,x=>x);
-    setTimeout(()=>speak('Number '+NUM_NAMES[n]),380);
+    setTimeout(()=>speak(L().numNames[n]),380);
   } else {
     const obj=currentItem;
-    document.getElementById('qLabel').textContent='Which letter starts...';
+    document.getElementById('qLabel').textContent=L().ui.whichLetter;
     document.getElementById('qContent').innerHTML=
-      `<div class="letter-cue"><div class="cue-emoji">${obj.emoji}</div><div class="cue-word"><span style="color:rgba(180,180,220,0.4)">_</span>${obj.word.slice(1)}!</div><div class="cue-hint">What is the first letter?</div></div>`;
-    const opts=buildOptList(LETTERS,obj,o=>o.l,o=>o.l);
+      `<div class="letter-cue"><div class="cue-emoji">${obj.emoji}</div><div class="cue-word"><span style="color:rgba(180,180,220,0.4)">_</span>${obj.word.slice(1)}!</div><div class="cue-hint">${L().ui.whichLetter}</div></div>`;
+    const opts=buildOptList(L().letters,obj,o=>o.l,o=>o.l);
     renderOptions(opts,obj.l,o=>o.l,o=>o.l);
     setTimeout(()=>speak(obj.word),380);
   }
@@ -621,6 +787,7 @@ function onSelect(btn,selected,correct){
 let subA=0, subB=0;
 
 function loadSubQuestion(){
+  document.getElementById('subLabel').textContent=L().ui.subLabel;
   // a - b >= 1, both 1-10
   subB=Math.floor(Math.random()*9)+1;          // 1-9
   subA=subB+Math.floor(Math.random()*(10-subB))+1; // subA > subB, max 10
@@ -637,7 +804,7 @@ function loadSubQuestion(){
   gA.appendChild(makeEmojiBox(subA, emoji, 0));
   const opElS=document.createElement('span');
   opElS.className='emoji-group-op';
-  opElS.style.color='#FF6B6B';
+  opElS.style.color='#C47A7A';
   opElS.textContent='−';
   gA.appendChild(opElS);
   gA.appendChild(makeEmojiBox(subB, emoji, subA));
@@ -648,7 +815,8 @@ function loadSubQuestion(){
   document.getElementById('subFormula').textContent=subA+' − '+subB+' = ?';
 
   buildMathOptions('subRow1','subRow2',correct,(btn,sel,cor)=>onSubSelect(btn,sel,cor));
-  setTimeout(()=>speak(NUM_NAMES[subA]+' minus '+NUM_NAMES[subB]),350);
+  const subNames = {en:'minus', tr:'eksi', nl:'min'};
+  setTimeout(()=>speak(L().numNames[subA]+' '+subNames[appLang]+' '+L().numNames[subB]),350);
 }
 
 function onSubSelect(btn,selected,correct){
@@ -659,6 +827,7 @@ function onSubSelect(btn,selected,correct){
 let mulA=0, mulB=0;
 
 function loadMulQuestion(){
+  document.getElementById('mulLabel').textContent=L().ui.mulLabel;
   // a x b, both 1-5, result max 10 (so child can count groups)
   mulA=Math.floor(Math.random()*9)+1;  // 1-9
   mulB=Math.floor(Math.random()*5)+1;  // 1-5
@@ -683,7 +852,8 @@ function loadMulQuestion(){
   document.getElementById('mulFormula').textContent=mulA+' × '+mulB+' = ?';
 
   buildMathOptions('mulRow1','mulRow2',correct,(btn,sel,cor)=>onMulSelect(btn,sel,cor));
-  setTimeout(()=>speak(NUM_NAMES[mulA]+' times '+NUM_NAMES[mulB]),350);
+  const mulNames = {en:'times', tr:'çarpı', nl:'keer'};
+  setTimeout(()=>speak(L().numNames[mulA]+' '+mulNames[appLang]+' '+L().numNames[mulB]),350);
 }
 
 function onMulSelect(btn,selected,correct){
@@ -729,6 +899,7 @@ function onMathSelect(row1Id,row2Id,streakId,btn,selected,correct,nextFn){
 let divA=0, divB=0;
 
 function loadDivQuestion(){
+  document.getElementById('divLabel').textContent=L().ui.divLabel;
   // result = divA / divB, all integers 1-10
   // pick result first (1-5), then divisor (2-5), total = result*divisor <= 10
   const result=Math.floor(Math.random()*4)+1;   // 1-4
@@ -758,7 +929,8 @@ function loadDivQuestion(){
 
   document.getElementById('divFormula').textContent=divA+' ÷ '+divB+' = ?';
   buildMathOptions('divRow1','divRow2',correct,(btn,sel,cor)=>onDivSelect(btn,sel,cor));
-  setTimeout(()=>speak(NUM_NAMES[divA]+' divided by '+NUM_NAMES[divB]),350);
+  const divNames = {en:'divided by', tr:'bölü', nl:'gedeeld door'};
+  setTimeout(()=>speak(L().numNames[divA]+' '+divNames[appLang]+' '+L().numNames[divB]),350);
 }
 
 function onDivSelect(btn,selected,correct){
@@ -935,13 +1107,11 @@ const STORY_TEMPLATES = {
 
 let storyLang = 'en';
 
-function showLangPicker(){
-  document.getElementById('langOverlay').classList.remove('hidden');
-}
+function showLangPicker(){ startMode('story'); }
 
 function startStoryMode(lang){
-  document.getElementById('langOverlay').classList.add('hidden');
-  storyLang = lang;
+  storyLang = lang || appLang;
+  setLang(storyLang);
   mode = 'story';
   streak = 0;
   initFloaters();
@@ -960,6 +1130,8 @@ function splitObj(raw){
 }
 
 function loadStoryQuestion(){
+  const lblMap={en:'Math Problems',tr:'Matematik Problemleri',nl:'Rekenproblemen'};
+  document.getElementById('storyLangLabel').textContent=lblMap[storyLang]||lblMap.en;
   const lang = storyLang;
   const templates = STORY_TEMPLATES[lang];
   const isAdd = Math.random() < 0.5;
@@ -1036,11 +1208,13 @@ function speakLang(text, langCode, voiceName){
 // ─── DRAW ───────────────────────────────────────────────────
 function showDrawScreen(item){
   showScreen('drawScreen');
+  document.getElementById('drawTitle').textContent=L().ui.nowDraw;
+  document.getElementById('drawHint').textContent=L().ui.trace;
   const label=mode==='numbers'?item:item.l;
-  document.getElementById('drawTitle').textContent='✏️ Now draw it!';
-  document.getElementById('drawHint').textContent=`Trace the ${mode==='numbers'?'number':'letter'} "${label}" with your finger`;
+  document.getElementById('drawTitle').textContent=L().ui.nowDraw;
+  document.getElementById('drawHint').textContent=L().ui.trace;
   initCanvas(label);
-  speak(mode==='numbers'?NUM_NAMES[item]:item.word);
+  speak(mode==='numbers'?L().numNames[item]:item.word);
 }
 
 function initCanvas(char){
@@ -1086,7 +1260,7 @@ function getPos(e,canvas){
 function drawStart(x,y){drawCtx.beginPath();drawCtx.moveTo(x,y);}
 function drawMove(x,y){
   drawCtx.lineTo(x,y);
-  drawCtx.strokeStyle='#FF6B6B';drawCtx.lineWidth=canvasW*.068;
+  drawCtx.strokeStyle='#8A9BB0';drawCtx.lineWidth=canvasW*.068;
   drawCtx.lineCap='round';drawCtx.lineJoin='round';
   drawCtx.stroke();drawCtx.beginPath();drawCtx.moveTo(x,y);
   const r=Math.ceil(canvasW*.034);
@@ -1132,6 +1306,7 @@ const ADD_EMOJIS=['🍎','🐶','⭐','🌸','🍕','🐱','🎈','🦋','🍦',
 let addA=0, addB=0;
 
 function loadAddQuestion(){
+  document.getElementById('addLabel').textContent=L().ui.addLabel;
   // Pick two numbers 1-10 that sum to max 15 (reasonable for 3.5yo)
   addA=Math.floor(Math.random()*9)+1;  // 1-9
   addB=Math.floor(Math.random()*(10-addA))+1; // 1 to (10-addA)
@@ -1181,7 +1356,8 @@ function loadAddQuestion(){
 
   // Speak: "five plus three"
   document.getElementById('addFormula').textContent=addA+' + '+addB+' = ?';
-  setTimeout(()=>speak(NUM_NAMES[addA]+' plus '+NUM_NAMES[addB]),350);
+  const addNames = {en:['plus'], tr:['artı'], nl:['plus']};
+  setTimeout(()=>speak(L().numNames[addA]+' '+addNames[appLang][0]+' '+L().numNames[addB]),350);
 }
 
 function onAddSelect(btn,selected,correct){
@@ -1230,14 +1406,368 @@ function createCenterSparkles(){
     setTimeout(()=>s.remove(),2000);
   }
 }
+// ─── LISTEN & WRITE MODE ─────────────────────────────────────────
+const WRITE_WORDS = {
+  en: ['cat','dog','pig','hen','bee','fox','owl','ant','rat','bat','cow','frog','duck','fish','bird','bear','deer','wolf','lamb','tiger','horse',
+       'apple','bread','cake','milk','rice','corn','bean','plum','lime','fig','pear','peach','grape','lemon','mango','melon','berry','onion',
+       'sun','moon','star','rain','snow','wind','fire','ice','fog','mud','rock','sand','tree','leaf','rose','seed','pond','lake','river',
+       'ball','book','door','hand','nose','face','hair','eyes','ears','foot','arms','knee','drum','bell','horn','kite','rope','ring',
+       'lamp','bowl','fork','spoon','brush','chair','table','clock','paint','salt','sugar','tea','water','home','road','bridge','school','car','train','boat'],
+  tr: ['kedi','köpek','kuş','inek','arı','tilki','baykuş','karınca','kurt','kuzu','kurbağa','ördek','balık','ayı','geyik','kaplan','at',
+       'elma','ekmek','pasta','süt','pirinç','mısır','fasulye','erik','limon','incir','armut','şeftali','üzüm','kavun','zeytin','soğan',
+       'güneş','ay','yıldız','yağmur','kar','rüzgar','ateş','buz','sis','çamur','kaya','kum','ağaç','yaprak','gül','tohum','göl','nehir',
+       'top','kitap','kapı','el','burun','yüz','saç','göz','kulak','ayak','kol','diz','kemik','davul','zil','keman','uçurtma','ip','yüzük',
+       'lamba','kase','çatal','kaşık','fırça','sandalye','masa','saat','boya','tuz','şeker','çay','kahve','su','ev','yol','köprü','okul','araba','tren','tekne'],
+  nl: ['kat','hond','kip','bij','vos','uil','mier','rat','koe','eend','vis','vogel','beer','hert','wolf','lam','tijger','paard',
+       'appel','brood','taart','melk','rijst','mais','boon','pruim','limoen','vijg','peer','perzik','druif','meloen','bes','ui',
+       'zon','maan','ster','regen','sneeuw','wind','vuur','ijs','mist','modder','rots','zand','boom','blad','roos','zaad','meer','rivier',
+       'bal','boek','deur','hand','neus','gezicht','haar','ogen','oren','voet','arm','knie','bot','trom','bel','harp','vlieger','touw','ring',
+       'lamp','kom','vork','lepel','borstel','stoel','tafel','klok','verf','zout','suiker','thee','water','huis','weg','brug','school','auto','trein','boot'],
+};
+
+let writePool = [];
+let writePoolIdx = 0;
+let writeCurrentWord = '';
+let writeHelpShown = false;
+let writeWrongCount = 0;
+
+function getNextWriteWord(){
+  if(writePoolIdx >= writePool.length){
+    const last = writePool[writePool.length-1];
+    writePool = shuffle([...WRITE_WORDS[appLang]]);
+    if(writePool[0] === last) writePool.push(writePool.shift());
+    writePoolIdx = 0;
+  }
+  return writePool[writePoolIdx++];
+}
+
+function loadWriteQuestion(){
+  writeCurrentWord = getNextWriteWord();
+  writeHelpShown = false;
+  writeWrongCount = 0;
+  showScreen('writeScreen');
+  document.getElementById('writeStreakEl').textContent = '🔥 ' + streak;
+  document.getElementById('writeInput').value = '';
+  document.getElementById('writeInput').style.borderColor = '#E0E0E0';
+  document.getElementById('writeLetterRow').innerHTML = '';
+
+  // Update hint text
+  const hints = {en:'Listen and write the word', tr:'Dinle ve kelimeyi yaz', nl:'Luister en schrijf het woord'};
+  document.getElementById('writeHint').textContent = hints[appLang] || hints.en;
+
+  // Update OK button
+  const okLabels = {en:'OK', tr:'Tamam', nl:'OK'};
+  document.getElementById('writeOkBtn').textContent = okLabels[appLang] || 'OK';
+
+  // Speak word after short delay
+  setTimeout(() => speakWriteWord(), 400);
+}
+
+function speakWriteWord(){
+  speak(writeCurrentWord);
+  // Pulse animation on speaker button
+  const btn = document.getElementById('writePronounceBtn');
+  btn.style.transform = 'scale(1.2)';
+  setTimeout(() => btn.style.transform = 'scale(1)', 300);
+}
+
+function onWriteInput(){
+  // Clear error state while typing
+  const inp = document.getElementById('writeInput');
+  inp.style.borderColor = '#E0E0E0';
+  inp.style.background = '#FAFAFA';
+  document.getElementById('writeLetterRow').innerHTML = '';
+}
+
+function checkWrite(){
+  const input = document.getElementById('writeInput').value.trim();
+  if(!input) { speakWriteWord(); return; }
+
+  const correct = writeCurrentWord;
+
+  // Case-insensitive, locale-aware comparison
+  if(smartLower(input.trim()) === smartLower(correct.trim())){
+    // Correct!
+    document.getElementById('writeInput').style.borderColor = '#7AB87A';
+    document.getElementById('writeInput').style.background = '#F0FAF0';
+    playDing();
+    createSparkles(document.getElementById('writeOkBtn'));
+    streak++;
+    document.getElementById('writeStreakEl').textContent = '🔥 ' + streak;
+    setTimeout(() => {
+      document.getElementById('writeInput').style.background = '#FAFAFA';
+      loadWriteQuestion();
+    }, 900);
+  } else {
+    // Wrong — shake + show letter feedback on 2nd attempt
+    writeWrongCount++;
+    document.getElementById('writeInput').style.borderColor = '#C47A7A';
+    document.getElementById('writeInput').classList.add('wrong');
+    setTimeout(() => document.getElementById('writeInput').classList.remove('wrong'), 400);
+    playWrong();
+    if(writeWrongCount >= 2){ showLetterFeedback(input, correct); }
+    // Re-speak after wrong
+    setTimeout(() => speakWriteWord(), 700);
+  }
+}
+
+function showLetterFeedback(input, correct){
+  const row = document.getElementById('writeLetterRow');
+  row.innerHTML = '';
+  // Normalize both strings the same way before comparing
+  const inpNorm = smartLower(input.trim());
+  const corNorm = smartLower(correct.trim());
+  const maxLen = Math.max(inpNorm.length, corNorm.length);
+  for(let i = 0; i < corNorm.length; i++){
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:clamp(20px,5vw,28px);font-weight:900;width:32px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;';
+    const inputChar = i < inpNorm.length ? inpNorm[i] : '';
+    const isMatch = inputChar === corNorm[i];
+    span.style.color = isMatch ? '#7AB87A' : '#C47A7A';
+    span.style.background = isMatch ? '#F0FAF0' : '#FFF0F0';
+    span.textContent = smartUpper(correct[i]);
+    row.appendChild(span);
+  }
+}
+
+// Turkish-aware case helpers
+function trUpper(str){
+  return str.replace(/i/g,'İ').replace(/ı/g,'I').toUpperCase();
+}
+function trLower(str){
+  return str.replace(/İ/g,'i').replace(/I(?!̇)/g,'ı').toLowerCase();
+}
+function smartUpper(str){
+  return appLang === 'tr' ? trUpper(str) : str.toUpperCase();
+}
+function smartLower(str){
+  // Always normalize İ→i first so cross-language typing doesn't break comparison
+  const normalized = str.normalize('NFC').replace(/İ/g,'i');
+  return appLang === 'tr' ? trLower(normalized) : normalized.toLowerCase();
+}
+
+function showWriteHelp(){
+  writeHelpShown = true;
+  const row = document.getElementById('writeLetterRow');
+  row.innerHTML = '';
+  for(let i = 0; i < writeCurrentWord.length; i++){
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:clamp(20px,5vw,28px);font-weight:900;width:32px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:#8A9BB0;background:#F0F4FA;';
+    span.textContent = smartUpper(writeCurrentWord[i]);
+    row.appendChild(span);
+  }
+  speakWriteWord();
+}
+
+
+// ─── COLOUR & SHAPES MODE ─────────────────────────────────────────
+const COLOUR_COLORS = [
+  {en:'red',    tr:'kırmızı', nl:'rood',    hex:'#D94F4F'},
+  {en:'blue',   tr:'mavi',    nl:'blauw',   hex:'#4A6FCC'},
+  {en:'yellow', tr:'sarı',    nl:'geel',    hex:'#F5D800'},
+  {en:'green',  tr:'yeşil',   nl:'groen',   hex:'#4A9E6A'},
+  {en:'orange', tr:'turuncu', nl:'oranje',  hex:'#FF8C00'},
+  {en:'purple', tr:'mor',     nl:'paars',   hex:'#7A4AB5'},
+  {en:'pink',   tr:'pembe',   nl:'roze',    hex:'#CC5588'},
+  {en:'brown',  tr:'kahverengi',nl:'bruin', hex:'#8B5E3C'},
+  {en:'black',  tr:'siyah',   nl:'zwart',   hex:'#222222'},
+  {en:'white',  tr:'beyaz',   nl:'wit',     hex:'#F0F0F0'},
+  {en:'grey',   tr:'gri',     nl:'grijs',   hex:'#909090'},
+];
+
+const COLOUR_SHAPES = [
+  {en:'circle',    tr:'daire',      nl:'cirkel',      svg:function(col){return "<svg viewBox='0 0 40 40'><circle cx='20' cy='20' r='18' fill='" + col + "'/></svg>";}},
+  {en:'square',    tr:'kare',       nl:'vierkant',    svg:function(col){return "<svg viewBox='0 0 40 40'><rect x='2' y='2' width='36' height='36' rx='3' fill='" + col + "'/></svg>";}},
+  {en:'triangle',  tr:'üçgen',      nl:'driehoek',    svg:function(col){return "<svg viewBox='0 0 40 40'><polygon points='20,2 38,38 2,38' fill='" + col + "'/></svg>";}},
+  {en:'star',      tr:'yıldız',     nl:'ster',        svg:function(col){return "<svg viewBox='0 0 40 40'><polygon points='20,2 24.5,14.5 38,14.5 27,22.5 31,36 20,28 9,36 13,22.5 2,14.5 15.5,14.5' fill='" + col + "'/></svg>";}},
+  {en:'rectangle', tr:'dikdörtgen', nl:'rechthoek',   svg:function(col){return "<svg viewBox='0 0 40 40'><rect x='2' y='9' width='36' height='22' rx='3' fill='" + col + "'/></svg>";}},
+  {en:'heart',     tr:'kalp',       nl:'hart',        svg:function(col){return "<svg viewBox='0 0 40 40'><path d='M20 35 C20 35 4 24 4 14 C4 8 9 4 14 6 C17 7 19 10 20 12 C21 10 23 7 26 6 C31 4 36 8 36 14 C36 24 20 35 20 35Z' fill='" + col + "'/></svg>";}},
+];
+
+let colourTarget = null;
+let colourShape = null;
+let colourCorrect = 0;
+let colourLocked = false;
+let colourQuestion = '';
+
+function getColorName(col){ return col[appLang] || col.en; }
+function getShapeName(sh){ return sh[appLang] || sh.en; }
+
+function loadColourQuestion(){
+  colourLocked = false;
+  showScreen('colourScreen');
+  document.getElementById('colourShapeGrid').innerHTML = '';
+  document.getElementById('colourRow1').innerHTML = '';
+  document.getElementById('colourRow2').innerHTML = '';
+  document.getElementById('colourStreakEl').textContent = '🔥 ' + streak;
+
+  // Pick target color + shape
+  colourTarget = COLOUR_COLORS[Math.floor(Math.random()*COLOUR_COLORS.length)];
+  colourShape  = COLOUR_SHAPES[Math.floor(Math.random()*COLOUR_SHAPES.length)];
+  colourCorrect = Math.floor(Math.random()*8)+1;
+
+  const dColors = shuffle(COLOUR_COLORS.filter(function(x){return x.en!==colourTarget.en;}));
+  const dShapes = shuffle(COLOUR_SHAPES.filter(function(x){return x.en!==colourShape.en;}));
+
+  // Build items: correct ones first
+  var items = [];
+  for(var i=0;i<colourCorrect;i++) items.push({shape:colourShape, color:colourTarget});
+
+  // Distractors: 3-6 items, each guaranteed to differ by color, shape, or both
+  var dCount = Math.floor(Math.random()*4)+3;
+  for(var j=0;j<dCount;j++){
+    var roll = Math.random();
+    var dc, ds;
+    if(roll < 0.4){
+      // Wrong color, same shape
+      dc = dColors[j % dColors.length];
+      ds = colourShape;
+    } else if(roll < 0.7){
+      // Same color, wrong shape
+      dc = colourTarget;
+      ds = dShapes[j % dShapes.length];
+    } else {
+      // Both wrong
+      dc = dColors[j % dColors.length];
+      ds = dShapes[j % dShapes.length];
+    }
+    items.push({shape:ds, color:dc});
+  }
+  items = shuffle(items);
+
+  // Render shapes using CSS (no SVG/innerHTML)
+  const grid = document.getElementById('colourShapeGrid');
+  items.forEach((item,i)=>{
+    const div = document.createElement('div');
+    const size = 'clamp(42px,9vw,54px)';
+    div.style.width = 'clamp(42px,9vw,54px)';
+    div.style.height = 'clamp(42px,9vw,54px)';
+    div.style.animationDelay = (i*0.05)+'s';
+    div.style.animation = 'popIn 0.3s ease backwards';
+    div.style.flexShrink = '0';
+    const col = item.color.hex;
+    const sh = item.shape.en;
+    if(sh === 'circle'){
+      div.style.background = col;
+      div.style.borderRadius = '50%';
+      div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    } else if(sh === 'square'){
+      div.style.background = col;
+      div.style.borderRadius = '4px';
+      div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    } else if(sh === 'rectangle'){
+      div.style.background = col;
+      div.style.borderRadius = '4px';
+      div.style.height = 'clamp(26px,5vw,34px)';
+      div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    } else if(sh === 'triangle'){
+      div.style.width = '0';
+      div.style.height = '0';
+      div.style.background = 'transparent';
+      div.style.borderLeft = 'clamp(21px,4.5vw,27px) solid transparent';
+      div.style.borderRight = 'clamp(21px,4.5vw,27px) solid transparent';
+      div.style.borderBottom = 'clamp(42px,9vw,54px) solid ' + col;
+    } else if(sh === 'star'){
+      div.style.background = col;
+      div.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+      div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    } else if(sh === 'heart'){
+      div.style.background = col;
+      div.style.clipPath = 'path(\'M 25 10 C 25 5 20 0 14 0 C 7 0 0 6 0 14 C 0 24 12 33 25 42 C 38 33 50 24 50 14 C 50 6 43 0 36 0 C 30 0 25 5 25 10 Z\')';
+      div.style.width = 'clamp(42px,9vw,54px)';
+      div.style.height = 'clamp(42px,9vw,54px)';
+      div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    }
+    grid.appendChild(div);
+  });
+
+  // Question text per language
+  const cn = getColorName(colourTarget);
+  const sn = getShapeName(colourShape);
+  const questions = {
+    en: `How many ${cn} ${sn}s are there?`,
+    tr: `Kaç tane ${cn} ${sn} var?`,
+    nl: `Hoeveel ${cn} ${sn}s zijn er?`,
+  };
+  colourQuestion = questions[appLang] || questions.en;
+  document.getElementById('colourQuestionText').textContent = colourQuestion;
+
+  // 6 answer options
+  const allNums = [1,2,3,4,5,6,7,8,9,10];
+  const wrongs = shuffle(allNums.filter(n=>n!==colourCorrect)).slice(0,5);
+  const opts = shuffle([colourCorrect,...wrongs]);
+  const btnC = ['#8FA89A','#8A9BB0','#B09880','#9E96B5','#7A9E8A','#A89898'];
+  const btnS = ['#6a8278','#637589','#8a7260','#786f93','#5a7a68','#806e6e'];
+  opts.forEach((num,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn c'+i;
+    btn.textContent = num;
+    btn.dataset.key = String(num);
+    btn.onclick = () => onColourSelect(btn, num, colourCorrect);
+    (i<3 ? document.getElementById('colourRow1') : document.getElementById('colourRow2')).appendChild(btn);
+  });
+
+  setTimeout(()=>speakColourQuestion(), 400);
+}
+
+function speakColourQuestion(){
+  speak(colourQuestion);
+}
+
+function onColourSelect(btn, selected, correct){
+  if(colourLocked) return;
+  if(selected === correct){
+    colourLocked = true;
+    btn.classList.add('correct'); playDing(); createSparkles(btn); streak++;
+    document.getElementById('colourStreakEl').textContent = '🔥 ' + streak;
+    setTimeout(()=>loadColourQuestion(), 900);
+  } else {
+    btn.classList.add('wrong');
+    btn.disabled = true; playWrong();
+    setTimeout(()=>{ btn.classList.remove('wrong'); btn.disabled=false; }, 650);
+  }
+}
+
+// Init language on page load
+setLang('en');
 </script>
-<div class="lang-overlay hidden" id="langOverlay">
-  <div class="lang-box">
-    <div class="lang-title">🌍 Choose Language</div>
-    <button class="lang-btn en" onclick="startStoryMode('en')">🇬🇧 Math Problems</button>
-    <button class="lang-btn tr" onclick="startStoryMode('tr')">🇹🇷 Matematik Problemleri</button>
-    <button class="lang-btn nl" onclick="startStoryMode('nl')">🇳🇱 Rekenproblemen</button>
-    <button class="lang-close" onclick="document.getElementById('langOverlay').classList.add('hidden')">✕ Cancel</button>
+
+
+<!-- WRITE SCREEN -->
+<div class="screen hidden" id="writeScreen">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="writeStreakEl">🔥 0</div>
+  </div>
+  <div class="question-card" style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:28px 20px;">
+    <div id="writePronounceBtn" style="background:#8A9BB0;border:none;border-radius:50%;width:72px;height:72px;font-size:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #637589;" onclick="speakWriteWord()">🔊</div>
+    <div id="writeHint" style="font-size:clamp(13px,3vw,16px);color:#999;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Listen and write the word</div>
+    <div id="writeInputRow" style="display:flex;gap:8px;width:100%;max-width:320px;">
+      <input id="writeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        style="flex:1;font-family:'Nunito',sans-serif;font-size:clamp(22px,6vw,32px);font-weight:900;border:2px solid #E0E0E0;border-radius:14px;padding:10px 14px;outline:none;color:#333;background:#FAFAFA;text-align:center;"
+        oninput="onWriteInput()" onkeydown="if(event.key==='Enter')checkWrite()"/>
+      <button onclick="showWriteHelp()" style="background:#E8E8E8;border:none;border-radius:14px;width:48px;font-size:20px;font-weight:900;color:#999;cursor:pointer;">?</button>
+    </div>
+    <div id="writeLetterRow" style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;min-height:36px;"></div>
+    <button onclick="checkWrite()" id="writeOkBtn"
+      style="background:#8FA89A;color:white;border:none;border-radius:50px;padding:12px 48px;font-family:'Nunito',sans-serif;font-size:clamp(18px,5vw,24px);font-weight:900;box-shadow:0 4px 0 #6a8278;cursor:pointer;margin-top:4px;">
+      OK
+    </button>
+  </div>
+</div>
+
+<!-- COLOUR SCREEN -->
+<div class="screen hidden" id="colourScreen" style="overflow-y:auto;justify-content:flex-start;padding-top:14px;">
+  <div class="q-header">
+    <button class="back-btn" onclick="goHome()">🏠</button>
+    <div class="streak" id="colourStreakEl">🔥 0</div>
+    <button style="background:#8A9BB0;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;box-shadow:0 3px 0 #637589;" onclick="speakColourQuestion()">🔊</button>
+  </div>
+  <div style="background:#FFFFFF;border-radius:22px;box-shadow:0 2px 12px rgba(0,0,0,0.07);padding:20px 16px;width:92%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div id="colourQuestionText" style="font-size:clamp(17px,4.5vw,22px);font-weight:900;color:#333;text-align:center;line-height:1.4;min-height:56px;display:flex;align-items:center;justify-content:center;"></div>
+    <div id="colourShapeGrid" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:12px;background:#F8F8F8;border-radius:16px;width:100%;min-height:130px;overflow:visible;"></div>
+    <div class="add-opts" id="colourRow1"></div>
+    <div class="add-opts2" id="colourRow2"></div>
   </div>
 </div>
 </body>
